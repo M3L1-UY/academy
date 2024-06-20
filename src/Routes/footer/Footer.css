@@ -1,0 +1,12 @@
+p {
+    font-size: small;
+    margin: 0;
+  }
+
+div{
+    text-align: justify;
+  }
+  
+  .footer-footer p{
+    font-size: x-small;
+  }
