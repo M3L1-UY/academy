@@ -175,9 +175,10 @@ export default function ListCurso({ title, accion }) {
                 </div>
               </div>
               <div className="tablaListado">
+                {usersContext?.role === "isAdmin" &&
               <button className="addBtn" onClick={handleAddCursos}>
                   <IoMdAdd />
-                </button>
+                </button>}
                 <div className="table-responsive">
               <table className="table table-striped table-bordered">
                 <thead>

@@ -11,6 +11,8 @@ import { FaTrashAlt } from "react-icons/fa";
 import { TbEdit } from "react-icons/tb";
 import { IoMdAdd } from "react-icons/io";
 import { useAppContext } from "../../hooks/appContext";
+import { useUsersContext } from "../../hooks/UsersContext";
+
 
 export default function ListMatricula({ title }) {
   AccessProfil("isTeacher");
@@ -30,6 +32,9 @@ export default function ListMatricula({ title }) {
     { id: 3, nombre: "studentNombre", descrip: "Estudiante" },
     { id: 4, nombre: "turno", descrip: "Turno" },
   ];
+  const { usersContext } = useUsersContext();
+
+
   function handleAddMatriculas() {
     const tittle = "Adición de Matrícula";
     openModal(
@@ -129,9 +134,10 @@ export default function ListMatricula({ title }) {
                 </div>
               </div>
               <div className="tablaListado">
+             {usersContext?.role === "isAdmin" &&
               <button className="addBtn" onClick={handleAddMatriculas}>
                   <IoMdAdd />
-                </button>
+                </button>}
                 <div className="table-responsive">
               <table className="table table-striped table-bordered">
                 <thead>
@@ -141,9 +147,11 @@ export default function ListMatricula({ title }) {
                     <th scope="col">Profesor</th>
                     <th scope="col">Alumno</th>
                     <th scope="col">Turno</th>
+                    {usersContext?.role === "isAdmin" && (
                     <th scope="col" colSpan={2}>
                       Acción
                     </th>
+                    )}
                   </tr>
                 </thead>
                 <tbody>
@@ -164,6 +172,7 @@ export default function ListMatricula({ title }) {
                           <td>{`${matricula.teacherNombre}`} </td>
                           <td>{`${matricula.studentNombre}`} </td>
                           <td>{`${matricula.turno}`} </td>
+                          {usersContext?.role === "isAdmin" && (<>
                           <td>
                             <TbEdit
                               className=".btnShow"
@@ -176,7 +185,7 @@ export default function ListMatricula({ title }) {
                               style={{ fontSize: "25px" }}
                               onClick={() => handleDel(matricula._id)}
                             />
-                          </td>
+                          </td></>)}
                         </tr>
                       );
                     })

@@ -76,14 +76,14 @@ function Menu() {
       route: "/",
       subItems: [],
     },
-    {
+  usersContext?.role === 'isStudent' && {
       title: "Estudiante",
       subItems: [
-        { title: "Registro", route: "/register" },
         { title: "Perfil", route: "/perfil" },
       ],
     },
-    {
+    
+    usersContext?.role === 'isAdmin' && {
       title: "Administración",
       subItems: [
         { title: "Cursos", route: "/cursos" },
@@ -112,7 +112,7 @@ function Menu() {
             { title: "Iniciar Sesión", route: "/login" },
           ],
     },
-  ];
+  ].filter(Boolean); 
 
   const [isExpanded, setIsExpanded] = useState(false);
   const menuRef = useRef(null);

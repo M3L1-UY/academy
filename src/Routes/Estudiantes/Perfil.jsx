@@ -6,6 +6,7 @@ import { useAppContext } from "../../hooks/appContext";
 import ValidateErrors from "../../componets/services/ValidateErrors";
 import validationSchema from "../../componets/services/validationSchema";
 import { useNavigate } from "react-router-dom";
+import { useUsersContext } from "../../hooks/UsersContext";
 
 export default function Perfil({ title }) {
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
@@ -14,6 +15,7 @@ export default function Perfil({ title }) {
   const [edit, setEdit] = useState(false); 
   const [student, setStudent] = useState({});
   const navigate = useNavigate();
+  const { usersContext } = useUsersContext();
   
   let initialForm = {
     _id: student ? student._id : null,
@@ -83,13 +85,12 @@ export default function Perfil({ title }) {
       });
     }
   };
-  
-  const getStudent = async (event) => {
-    let url = `${hostServer}/api/studentdni/${event.target.value}`;
+  const getStudent = async (dni) => {
+    let url = `${hostServer}/api/studentdni/${dni}`;
     const responseData = await getData(url);
     if (responseData && responseData.data.data) {
       setStudent(responseData.data.data);
-      setEdit(true); 
+      setEdit(true);
       fillForm(responseData.data.data);
     } else {
       setEdit(false);
@@ -102,6 +103,12 @@ export default function Perfil({ title }) {
       });
     }
   };
+
+  useEffect(() => {
+    if (usersContext?.dni) {
+      getStudent(usersContext.dni);
+    }
+  }, [usersContext]);
 
   useEffect(() => {
     if (data?.message) {
@@ -157,7 +164,7 @@ export default function Perfil({ title }) {
                           name="dni"
                           value={dni}
                           onBlur={getStudent}
-                          disabled={edit && dni} 
+                          disabled={true}
                         />
                         {errorsInput.dni && (
                           <ValidateErrors errors={errorsInput.dni} />
@@ -180,7 +187,8 @@ export default function Perfil({ title }) {
                         )}
                       </div>
                       <div className="form-group col-md-6 mt-2">
-                        <label htmlFor="inputName">Apellidos </label>
+                      <label htmlFor="inputName">{usersContext?.dni} Apellidos</label>
+
                         <input
                           type="text"
                           className="form-control"
