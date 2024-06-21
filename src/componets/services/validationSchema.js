@@ -18,7 +18,7 @@ const validationSchema = {
   ],
   email: [
     (value) => (value.trim() === "" ? "El email es requerido" : undefined),
-    (value) => (value.trim() !== "" && !/^\S+@\S+\.\S+$/.test(value) ? "El email no es válido" : undefined),
+    (value) => (value.trim() !== "" && !/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) ? "El email no es válido" : undefined),
   ],
   confirmPassword: [
     (value) => (value === "" ? "La contraseña es requerida" : undefined),

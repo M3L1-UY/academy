@@ -116,7 +116,7 @@ export default function ListUser({ title }) {
   const getRoleClass = (role) => {
     switch (role) {
       case "isTeacher":
-        return "text-primary role-style"; // Azul
+        return "text-info role-style"; // Azul
       case "isAdmin":
         return "text-danger role-style"; // Rojo
       case "isStudent":

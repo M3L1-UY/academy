@@ -11,6 +11,7 @@ import AccessProfil from "../../componets/services/AccessProfil";
 export default function User({ user, edit, riviewList }) {
   const { HandleClose } = useAppContext();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const api = `${hostServer}/api/user`;
   const [error, setError] = useState(false);
@@ -61,13 +62,14 @@ export default function User({ user, edit, riviewList }) {
    // token
   } = formData;
 
-  let { data, isLoading, getData, createData, updateData } = useFetch(null);
+  let { data, createData, updateData } = useFetch(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const numError = validateForm();
     let response;
     setIsSubmitted(true);
+    setIsLoading(true);
 
     if (!formData.dni || !formData.nombre || !formData.apellido || !formData.email || !formData.password || !formData.confirmPassword || !formData.address ||!formData.condicion|| !formData.role) {
       Swal.fire({
@@ -77,6 +79,7 @@ export default function User({ user, edit, riviewList }) {
         showConfirmButton: false,
         timer: 5000,
       });
+      setIsLoading(false);
       return;
     }
 
@@ -86,13 +89,16 @@ export default function User({ user, edit, riviewList }) {
       let url = `${api}`;
       if (!edit) {
         response = await createData(url, formData);
+        setIsLoading(false);
       } else {
         response = await updateData(url, user._id, formData);
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error:", error);
     }
     } else {
+      setIsLoading(false);
       Swal.fire({
         position: "top",
         icon: "info",
@@ -102,6 +108,7 @@ export default function User({ user, edit, riviewList }) {
       });
     }
     if (response?.status === 400) {
+      setIsLoading(false);
       Swal.fire({
         position: "top",
         icon: "error",
@@ -110,6 +117,7 @@ export default function User({ user, edit, riviewList }) {
         timer: 3500,
       });
     } else {
+      setIsLoading(false);
       Swal.fire({
         position: "top",
         icon: "success",
@@ -357,20 +365,13 @@ export default function User({ user, edit, riviewList }) {
                 </div>
               </div>
               <div className="btn-submit mt-5 mb-lg-3">
-                {edit ? (
-                  <button
-                    onClick={handleSubmit}
-                    className="form-button"
-                  >
-                    Actualizar
+              {edit ? (
+                  <button type="submit" className="form-button "disabled={isLoading}>
+                    {isLoading ? "Actualizando..." : "Actualizar"}
                   </button>
                 ) : (
-                  <button
-                    onClick={handleSubmit}
-                    type="submit"
-                    className="form-button"
-                  >
-                    Agregar
+                  <button type="submit" className="form-button" disabled={isLoading}>
+                    {isLoading ? "Espere..." : "Agregar"}
                   </button>
                 )}
               </div>

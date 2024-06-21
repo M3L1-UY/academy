@@ -191,9 +191,10 @@ export default function VerCurso({ curso , accion}) {
               <section className="courseVerSection row mt-3 mb-5">
                 <div className="col-md-12  mx-auto">
                   <h2 className="text-primary mb-4">{nombre}</h2>
-                  <h3 className="text-secondary ">Código: {codigo}</h3>
+                  <h3 className="text-secondary text-center">Código: {codigo}</h3>
                 </div>
 
+                {urlImageCourse ? (
                 <div className="imageContainerDiv row mb-5">
                   <img
                     src={urlImageCourse}
@@ -201,6 +202,7 @@ export default function VerCurso({ curso , accion}) {
                     className="upLoadImg"
                   />
                 </div>
+                  ): ( <div className="mt-4"></div>)}
 
                 <div className="d-flex flex-row justify-content-evenly col-md-12 mx-auto ">
                       <div className="d-flex flex-column align-items-center mb-3">
@@ -236,6 +238,7 @@ export default function VerCurso({ curso , accion}) {
                   </div>
                   </div>
                   </div>
+                {profesores && 
                 <div className="d-flex justify-content-center align-items-center mt-2">
                   <h5 className="text-dark me-2 mb-0">Profesores:</h5>
                   {profesores.map((profesor) => (
@@ -244,6 +247,7 @@ export default function VerCurso({ curso , accion}) {
                     </div>
                   ))}
                 </div>
+                }
               </section>
             </form>
           </div>

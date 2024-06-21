@@ -20,18 +20,16 @@ const Logout = () => {
         dangerMode: true,
       }).then((result) => {
         if (result.isConfirmed) {
-          // Llamar a la API de logout
           fetch(`${import.meta.env.VITE_REACT_APP_SERVER_HOST}/api/user/logout`, {
             method: 'POST',
-            credentials: 'include', // Para enviar cookies si estás utilizando cookies
+            credentials: 'include',
           })
             .then((response) => response.json())
             .then((data) => {
               if (data.status === '200') {
-                Cookies.remove('user'); // Eliminar la cookie en el cliente
-                setUsersContext(null); // Limpiar el contexto de usuario
+                Cookies.remove('user'); 
+                setUsersContext(null); 
                 Swal.fire('Sesión cerrada', 'Su sesión ha sido cerrada exitosamente', 'success').then(() => {
-                  navigate('/login'); 
                 });
               } else {
                 Swal.fire('Error', 'Hubo un problema al cerrar la sesión', 'error');

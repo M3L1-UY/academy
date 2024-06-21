@@ -16,7 +16,7 @@ export default function Matricula({ matricula, edit, riviewList }) {
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState(false);
   const [isSubmitted,setIsSubmitted ] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialForm = {
     id: matricula ? matricula._id : 0,
@@ -38,8 +38,6 @@ export default function Matricula({ matricula, edit, riviewList }) {
 
   let {
     data,
-    isLoading = false,
-    getData,
     createData,
     updateData,
   } = useFetch(null);
@@ -48,6 +46,7 @@ export default function Matricula({ matricula, edit, riviewList }) {
     e.preventDefault();
     const numError = validateForm();
     setIsSubmitted(true);
+    setIsLoading(true)
 
     if (!formData.cursoId || !formData.teacherId || !formData.studentId || !formData.turno || !formData.finicio || !formData.ffin) {
       Swal.fire({
@@ -57,6 +56,7 @@ export default function Matricula({ matricula, edit, riviewList }) {
         showConfirmButton: false,
         timer: 5000,
       });
+      setIsLoading(false);
       return;
     }
     else if (formData.finicio  > formData.ffin) {
@@ -67,6 +67,7 @@ export default function Matricula({ matricula, edit, riviewList }) {
         showConfirmButton: false,
         timer: 5000,
       });
+      setIsLoading(false);
       return;
     }
   else if(!numError) {
@@ -74,13 +75,16 @@ export default function Matricula({ matricula, edit, riviewList }) {
         let url = `${api}`;
         if (!edit) {
           await createData(url, formData);
+          setIsLoading(false);
         } else {
           await updateData(url, matricula._id, formData);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error al enviar datos:", error);
       }
     } else {
+      setIsLoading(false);
       Swal.fire({
         position: "top",
         icon: "info",
@@ -351,12 +355,12 @@ export default function Matricula({ matricula, edit, riviewList }) {
 
               <div className="btn-submit mt-5">
               {edit ? (
-                  <button type="submit" className="form-button "disabled={isSubmitted}>
-                    {isSubmitted ? "Actualizando..." : "Actualizar"}
+                  <button type="submit" className="form-button "disabled={isLoading}>
+                    {isLoading ? "Actualizando..." : "Actualizar"}
                   </button>
                 ) : (
-                  <button type="submit" className="form-button" disabled={isSubmitted}>
-                    {isSubmitted ? "Espere..." : "Agregar"}
+                  <button type="submit" className="form-button" disabled={isLoading}>
+                    {isLoading ? "Espere..." : "Agregar"}
                   </button>
                 )}
               </div>

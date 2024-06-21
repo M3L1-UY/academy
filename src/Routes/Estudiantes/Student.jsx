@@ -14,6 +14,7 @@ export default function Student({ student, edit, riviewList }) {
   const api = `${hostServer}/api/student`;
   const [error, setError] = useState(false);
   const [isSubmitted,setIsSubmitted ] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initialForm = {
     id: student ? student._id : "",
@@ -50,8 +51,6 @@ export default function Student({ student, edit, riviewList }) {
 
   let {
     data,
-    isLoading = false,
-    getData,
     createData,
     updateData,
   } = useFetch(null);
@@ -61,6 +60,7 @@ export default function Student({ student, edit, riviewList }) {
     const numError = validateForm();
 
     setIsSubmitted(true);
+    setIsLoading(true);
 
     if (!formData.dni || !formData.nombre || !formData.apellido || !formData.email || !formData.password || !formData.confirmPassword || !formData.condicion) {
       Swal.fire({
@@ -70,6 +70,7 @@ export default function Student({ student, edit, riviewList }) {
         showConfirmButton: false,
         timer: 5000,
       });
+      setIsLoading(false);
       return;
     }
 
@@ -79,13 +80,16 @@ export default function Student({ student, edit, riviewList }) {
       try {
         if (!edit) {
           await createData(url, formData);
+          setIsLoading(false);
         } else {
           await updateData(url, student._id, formData);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error:", error);
       }
     } else {
+      setIsLoading(false);
       Swal.fire({
         position: "top",
         icon: "info",
@@ -321,12 +325,12 @@ export default function Student({ student, edit, riviewList }) {
 
               <div className="btn-submit mt-5 mb-3">
               {edit ? (
-                  <button type="submit" className="form-button "disabled={isSubmitted}>
-                    {isSubmitted ? "Actualizando..." : "Actualizar"}
+                  <button type="submit" className="form-button "disabled={isLoading}>
+                    {isLoading ? "Actualizando..." : "Actualizar"}
                   </button>
                 ) : (
-                  <button type="submit" className="form-button" disabled={isSubmitted}>
-                    {isSubmitted ? "Espere..." : "Agregar"}
+                  <button type="submit" className="form-button" disabled={isLoading}>
+                    {isLoading ? "Espere..." : "Agregar"}
                   </button>
                 )}
               </div>

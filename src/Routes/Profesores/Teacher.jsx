@@ -12,6 +12,8 @@ export default function Teacher({ teacher, edit, riviewList }) {
   const api = `${hostServer}/api/teacher`;
   const { HandleClose } = useAppContext();
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [error, setError] = useState(false);
   const initialForm = {
     id: teacher ? teacher._id : "",
@@ -48,8 +50,6 @@ export default function Teacher({ teacher, edit, riviewList }) {
 
   let {
     data,
-    isLoading = false,
-    getData,
     createData,
     updateData,
   } = useFetch(null);
@@ -60,6 +60,7 @@ export default function Teacher({ teacher, edit, riviewList }) {
     let response;
 
     setIsSubmitted(true);
+    setIsLoading(true);
 
     if (!formData.dni || !formData.nombre || !formData.apellido || !formData.email || !formData.password || !formData.confirmPassword || !formData.condicion) {
       Swal.fire({
@@ -69,6 +70,7 @@ export default function Teacher({ teacher, edit, riviewList }) {
         showConfirmButton: false,
         timer: 5000,
       });
+      setIsLoading(false);
       return;
     }
 
@@ -79,13 +81,16 @@ export default function Teacher({ teacher, edit, riviewList }) {
 
         if (!edit) {
           response = await createData(url, formData);
+          setIsLoading(false);
         } else {
           response =  await updateData(url, teacher._id, formData);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error:", error);
       }
     } else {
+      setIsLoading(false);
       Swal.fire({
         position: "top",
         icon: "info",
@@ -95,6 +100,7 @@ export default function Teacher({ teacher, edit, riviewList }) {
       });
     }   
       if (response.status === 400) {
+        setIsLoading(false);
         Swal.fire({
           position: "top",
           icon: "error",
@@ -103,6 +109,7 @@ export default function Teacher({ teacher, edit, riviewList }) {
           timer: 3500,
         });
       } else {
+        setIsLoading(false);
         Swal.fire({
           position: "top",
           icon: "success",
@@ -333,12 +340,12 @@ export default function Teacher({ teacher, edit, riviewList }) {
               </div>
               <div className="btn-submit mt-5 mb-3">
               {edit ? (
-                  <button type="submit" className="form-button "disabled={isSubmitted}>
-                    {isSubmitted ? "Actualizando..." : "Actualizar"}
+                  <button type="submit" className="form-button "disabled={isLoading}>
+                    {isLoading ? "Actualizando..." : "Actualizar"}
                   </button>
                 ) : (
-                  <button type="submit" className="form-button" disabled={isSubmitted}>
-                    {isSubmitted ? "Espere..." : "Agregar"}
+                  <button type="submit" className="form-button" disabled={isLoading}>
+                    {isLoading ? "Espere..." : "Agregar"}
                   </button>
                 )}
               </div>

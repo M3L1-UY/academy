@@ -8,7 +8,7 @@ function AccessProfil(profile = "isAdmin") {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (usersContext.role !== "isAdmin" && usersContext.role !== profile) {
+    if (usersContext?.role !== "isAdmin" && usersContext?.role !== profile) {
       Swal.fire({
         position: "top",
         icon: "info",

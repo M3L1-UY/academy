@@ -9,6 +9,7 @@ import {validationContactSchema} from "../../componets/services/validationSchema
 export default function Contact({ contact, edit, riviewList }) {
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { HandleNivelClose } = useAppContext();
   const url = `${hostServer}/api/contact`;
   const [courses, setCourses] = useState([]);
@@ -33,8 +34,6 @@ export default function Contact({ contact, edit, riviewList }) {
 
   let {
     data,
-    isLoading = false,
-    getData,
     createData,
     updateData,
   } = useFetch(null);
@@ -45,16 +44,18 @@ export default function Contact({ contact, edit, riviewList }) {
     const numError = validateForm();
 
     setIsSubmitted(true);
+    setIsLoading(true)
 
     if (!numError) {
       if (!edit) {
         await createData(url, formData);
+        setIsLoading(false);
       } else {
         await updateData(url, contact._id, formData);
+        setIsLoading(false);
       }
     } else {
-
-      console.log()
+      setIsLoading(false);
       Swal.fire({
         position: "top",
         icon: "info",
@@ -104,7 +105,7 @@ export default function Contact({ contact, edit, riviewList }) {
         clearForm();
         // riviewList();
       }
-      setIsSubmitted(false);
+      
     }
   }, [data]);
 
@@ -237,12 +238,12 @@ export default function Contact({ contact, edit, riviewList }) {
 
               <div className="btn-submit mt-4 mb-1">
                 {edit ? (
-                  <button type="submit" className="form-button "disabled={isSubmitted}>
-                    {isSubmitted ? "Actualizando..." : "Actualizar"}
+                  <button type="submit" className="form-button "disabled={isLoading}>
+                    {isLoading ? "Actualizando..." : "Actualizar"}
                   </button>
                 ) : (
-                  <button type="submit" className="form-button" disabled={isSubmitted}>
-                    {isSubmitted ? "Enviando..." : "Enviar"}
+                  <button type="submit" className="form-button" disabled={isLoading}>
+                    {isLoading ? "Enviando..." : "Enviar"}
                   </button>
                 )}
               </div>

@@ -14,17 +14,16 @@ import { IoMdAdd } from "react-icons/io";
 import { FaRegEye } from "react-icons/fa";
 import AccessProfil from "../../componets/services/AccessProfil";
 import { useNavigate } from "react-router-dom";
+import { useUsersContext } from "../../hooks/UsersContext";
 
 export default function ListCurso({ title, accion }) {
-  AccessProfil(accion === "gestionar" ? "isTeacher" : "isAdmin");
-
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const url = `${hostServer}/api/courses`;
   const { HandleClose } = useAppContext();
   const [selectedItems, setSelectedItems] = useState([]);
   const [page, setPage] = useState(1);
   const [itemsPage, setItemsPage] = useState(8);
-  const [progress, setProgress] = useState(false);
+  const navigate = useNavigate();
   let { data, isLoading, getData, deleteData } = useFetch(`${url}`);
   const bgChange = true;
   const modalNivel = 1;
@@ -32,6 +31,22 @@ export default function ListCurso({ title, accion }) {
     { id: 1, nombre: "codigo", descrip: "Código" },
     { id: 2, nombre: "nombre", descrip: "Nombre" },
   ];
+  const { usersContext } = useUsersContext();
+
+  useEffect(() => {
+    if (accion === "gestionar") {
+      if (usersContext.role !== "isTeacher" && usersContext.role !== "isAdmin") {
+        Swal.fire({
+          position: "top",
+          icon: "info",
+          title: "No está autorizado para trabajar en la sección",
+          showConfirmButton: false,
+          timer: 3500,
+        });
+        navigate(`/`);
+      }
+    }
+  }, [accion, usersContext.role]);
 
   const handleAddCursos = () => {
     const tittle = "Adición de Cursos";

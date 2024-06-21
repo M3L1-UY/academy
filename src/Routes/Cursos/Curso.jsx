@@ -28,11 +28,10 @@ export default function Curso({ curso, edit, riviewList }) {
     urlImagen: curso ? curso.urlImagen : "",
   };
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [imageCourse, setImageCourse] = useState(curso ? null : curso.urlImagen);
   const [urlImageCourse, setUrlImageCourse] = useState(curso ? curso.urlImagen : null);
-
-  
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [profesores, setProfesores] = useState([
     {
       id: 1,
@@ -88,8 +87,6 @@ export default function Curso({ curso, edit, riviewList }) {
 
   let {
     data,
-    isLoading = false,
-    getData,
     createData,
     updateData,
   } = useFetch(null);
@@ -104,6 +101,7 @@ export default function Curso({ curso, edit, riviewList }) {
     const numError = validateForm();
 
     setIsSubmitted(true);
+    setIsLoading(true)
 
     if (!formData.codigo || !formData.nombre || !formData.descripcion || !formData.costo || !formData.condicion || !formData.duracion) {
       Swal.fire({
@@ -113,6 +111,7 @@ export default function Curso({ curso, edit, riviewList }) {
         showConfirmButton: false,
         timer: 5000,
       });
+      setIsLoading(false);
       return;
     }
 
@@ -121,7 +120,8 @@ export default function Curso({ curso, edit, riviewList }) {
     );
   
     if (profesoresIncompletos) {
-      Swal.fire({
+      setIsLoading(false);
+      Swal.fire({  
         position: "top",
         icon: "warning",
         title: "Si asigna un profesor, debe indicar su costo por hora, y viceversa.",
@@ -150,8 +150,10 @@ export default function Curso({ curso, edit, riviewList }) {
         console.log(formData)
         if (!edit) {
           response = await createData(urlServer, formData);
+          setIsLoading(false);
         } else {
           response = await updateData(urlServer, curso._id, formData);
+          setIsLoading(false);
         }
         
         if (response.status === 400) {
@@ -392,10 +394,13 @@ export default function Curso({ curso, edit, riviewList }) {
                         <option>Activo</option>
                         <option>No Activo</option>
                       </select>
+                      {isSubmitted && errorsInput.condicion && (
+                        <ValidateErrors errors={errorsInput.condicion} />
+                      )}
                     </div>
                   </div>
-                  <div className="row mt-2">
-                    <div className="form-group col-md-12">
+                  <div className="row ">
+                    <div className="form-group col-md-12 mt-2">
                       <label htmlFor="duracion">Duración *</label>
                       <input
                         type="duracion"
@@ -410,8 +415,8 @@ export default function Curso({ curso, edit, riviewList }) {
                       )}
                     </div>
                   </div>
-                  <div className="row mt-2">
-                    <div className="form-group col-md-12">
+                  <div className="row">
+                    <div className="form-group col-md-12 mt-2">
                       <label htmlFor="clasificacion">
                         Clasificación
                       </label>
@@ -428,7 +433,7 @@ export default function Curso({ curso, edit, riviewList }) {
                       )}
                     </div>
                   </div>
-                  <div className="row mt-2">
+                  <div className="row mt-4">
                     <label
                       htmlFor="teacher"
                       className="teacherGrup mt-2 from-grup"
@@ -496,7 +501,7 @@ export default function Curso({ curso, edit, riviewList }) {
                       htmlFor="file"
                       className="block text-sm font-medium text-gray-700"
                     ></label>
-                    <div className="mt-2 flex items-center">
+                    <div className="mt-4 flex items-center">
                       <label htmlFor="file-input" className="upload">
                         <span>Subir Foto</span>
                       </label>
@@ -541,12 +546,12 @@ export default function Curso({ curso, edit, riviewList }) {
 
               <div className="btn-submit mb-3">
               {edit ? (
-                  <button type="submit" className="form-button "disabled={isSubmitted}>
-                    {isSubmitted ? "Actualizando..." : "Actualizar"}
+                  <button type="submit" className="form-button "disabled={isLoading}>
+                    {isLoading ? "Actualizando..." : "Actualizar"}
                   </button>
                 ) : (
-                  <button type="submit" className="form-button" disabled={isSubmitted}>
-                    {isSubmitted ? "Espere..." : "Agregar"}
+                  <button type="submit" className="form-button" disabled={isLoading}>
+                    {isLoading ? "Espere..." : "Agregar"}
                   </button>
                 )}
               </div>
