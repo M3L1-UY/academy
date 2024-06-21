@@ -8,7 +8,6 @@ import validationSchema from "../../componets/services/validationSchema";
 import { useNavigate } from "react-router-dom";
 
 export default function Perfil({ title }) {
-  const { HandleNivelClose } = useAppContext();
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const api = `${hostServer}/api/student`;
   const [error, setError] = useState(false);
@@ -143,13 +142,13 @@ export default function Perfil({ title }) {
           errorMessage()
         ) : (
           <>
-            <div className="container ">
+            <div className="container">
               <div className="form-initial-div col-md-10 mx-auto">
                 <h2 className="form-titulo">{title}</h2>
                 <div className="container p-5">
                   <form onSubmit={handleSubmit}>
                     <div className="row mx-auto">
-                      <div className="form-group col-md-6 mx-auto">
+                      <div className="form-group col-md-6 mb-3 mx-auto">
                         <label htmlFor="dni">Documento de identidad</label>
                         <input
                           type="text"
@@ -165,8 +164,8 @@ export default function Perfil({ title }) {
                         )}
                       </div>
                     </div>
-                    <div className="row  mt-2">
-                      <div className="form-group col-md-6">
+                    <div className="row">
+                      <div className="form-group col-md-6 mt-2">
                         <label htmlFor="nombre">Nombres </label>
                         <input
                           type="text"
@@ -180,7 +179,7 @@ export default function Perfil({ title }) {
                           <ValidateErrors errors={errorsInput.nombre} />
                         )}
                       </div>
-                      <div className="form-group col-md-6">
+                      <div className="form-group col-md-6 mt-2">
                         <label htmlFor="inputName">Apellidos </label>
                         <input
                           type="text"
@@ -195,8 +194,8 @@ export default function Perfil({ title }) {
                         )}
                       </div>
                     </div>
-                    <div className="row  mt-2">
-                      <div className="form-group col-md-6">
+                    <div className="row">
+                      <div className="form-group col-md-6 mt-2">
                         <label htmlFor="email">Correo Electrónico</label>
                         <input
                           type="email"
@@ -210,7 +209,7 @@ export default function Perfil({ title }) {
                           <ValidateErrors errors={errorsInput.email} />
                         )}
                       </div>
-                      <div className="form-group col-md-6">
+                      <div className="form-group col-md-6 mt-2">
                         <label htmlFor="celular">Celular </label>
                         <input
                           type="text"
@@ -236,8 +235,8 @@ export default function Perfil({ title }) {
                         onChange={onInputChange}
                       />
                     </div>
-                    <div className="row  mt-2">
-                      <div className="form-group col-md-6">
+                    <div className="row">
+                      <div className="form-group col-md-6 mt-2">
                         <label htmlFor="city">Ciudad</label>
                         <input
                           type="text"
@@ -248,7 +247,7 @@ export default function Perfil({ title }) {
                           onChange={onInputChange}
                         />
                       </div>
-                      <div className="form-group col-md-3 mx-auto">
+                      <div className="form-group col-md-3 mx-auto mt-2">
                         <label htmlFor="condicion">Estatus</label>
                         <select
                           name="condicion"

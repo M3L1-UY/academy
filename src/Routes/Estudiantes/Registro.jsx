@@ -109,13 +109,13 @@ export default function Student({ title }) {
   }, [data]);
 
   return (
-    <div className="container ">
+    <div className="container">
       <div className="form-initial-div col-md-10 mx-auto">
         <h2 className="form-titulo">{title}</h2>
         <div className="container p-5">
           <form onSubmit={handleSubmit}>
             <div className="row mx-auto">
-              <div className="form-group col-md-6 mx-auto">
+              <div className="form-group col-md-6 mx-auto  mb-3">
                 <label htmlFor="dni">Documento de identidad *</label>
                 <input
                   type="text"
@@ -128,8 +128,8 @@ export default function Student({ title }) {
                 {isSubmitted && errorsInput.dni && <ValidateErrors errors={errorsInput.dni} />}
               </div>
             </div>
-            <div className="row mt-2">
-              <div className="form-group col-md-6">
+            <div className="row">
+              <div className="form-group col-md-6 mt-2">
                 <label htmlFor="nombre">Nombres *</label>
                 <input
                   type="text"
@@ -141,7 +141,7 @@ export default function Student({ title }) {
                 />
                 {isSubmitted && errorsInput.nombre && <ValidateErrors errors={errorsInput.nombre} />}
               </div>
-              <div className="form-group col-md-6">
+              <div className="form-group col-md-6 mt-2">
                 <label htmlFor="inputName">Apellidos *</label>
                 <input
                   type="text"
@@ -154,8 +154,8 @@ export default function Student({ title }) {
                 {isSubmitted && errorsInput.apellido && <ValidateErrors errors={errorsInput.apellido} />}
               </div>
             </div>
-            <div className="row mt-2">
-              <div className="form-group col-md-6">
+            <div className="row">
+              <div className="form-group col-md-6 mt-2">
                 <label htmlFor="email">Correo Electrónico *</label>
                 <input
                   type="email"
@@ -167,7 +167,7 @@ export default function Student({ title }) {
                 />
                 {isSubmitted && errorsInput.email && <ValidateErrors errors={errorsInput.email} />}
               </div>
-              <div className="form-group col-md-6">
+              <div className="form-group col-md-6 mt-2">
                 <label htmlFor="celular">Celular</label>
                 <input
                   type="text"
@@ -180,8 +180,8 @@ export default function Student({ title }) {
                 {isSubmitted && errorsInput.celular && <ValidateErrors errors={errorsInput.celular} />}
               </div>
             </div>
-            <div className="row mt-2">
-              <div className="form-group col-md-6">
+            <div className="row">
+              <div className="form-group col-md-6 mt-2">
                 <label htmlFor="password">Contraseña *</label>
                 <input
                   type="password"
@@ -193,7 +193,7 @@ export default function Student({ title }) {
                 />
                 {isSubmitted && errorsInput.password && <ValidateErrors errors={errorsInput.password} />}
               </div>
-              <div className="form-group col-md-6">
+              <div className="form-group col-md-6 mt-2">
                 <label htmlFor="confirmPassword">Confirmación de Contraseña *</label>
                 <input
                   type="password"
@@ -218,8 +218,8 @@ export default function Student({ title }) {
               />
               {isSubmitted && errorsInput.adress && <ValidateErrors errors={errorsInput.adress} />}
             </div>
-            <div className="row mt-2">
-              <div className="form-group col-md-6">
+            <div className="row">
+              <div className="form-group col-md-6 mt-2">
                 <label htmlFor="city">Ciudad</label>
                 <input
                   type="text"
@@ -231,7 +231,7 @@ export default function Student({ title }) {
                 />
                 {isSubmitted && errorsInput.city && <ValidateErrors errors={errorsInput.city} />}
               </div>
-              <div className="form-group col-md-3 mx-auto">
+              <div className="form-group col-md-3 mt-2 mx-auto">
                 <label htmlFor="condicion">Estado *</label>
                 <select
                   name="condicion"

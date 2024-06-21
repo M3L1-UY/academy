@@ -97,8 +97,8 @@ const Pagination = ({ items, page, pagItems, nextPage, onPageChange }) => {
             <option value={20}>20</option>
           </select>
         </div>
-        <ul className="pagPagination">{listItems}</ul>
-        <div className="buttonPagination">
+        <div className="pageSice">
+        <div className="buttonPaginationLeft">
           <a
             className="btnPagination"
             onClick={() => handlePageChange(firstPage)}
@@ -113,6 +113,9 @@ const Pagination = ({ items, page, pagItems, nextPage, onPageChange }) => {
           >
             <TbPlayerTrackPrevFilled />
           </a>
+        </div>
+        <ul className="pagPagination">{listItems}</ul>
+        <div className="buttonPaginationRight">
           <a
             className="btnPagination"
             onClick={() => handlePageChange(currentPage + 1)}
@@ -127,10 +130,14 @@ const Pagination = ({ items, page, pagItems, nextPage, onPageChange }) => {
           >
             <ImNext2 />
           </a>
+          </div>
+        
+        </div>
+        <div className="pageSice">
           <span>
             Página {currentPage} de {totalPages}
           </span>
-        </div>
+          </div>
       </section>
     </>
   );

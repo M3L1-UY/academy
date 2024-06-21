@@ -19,7 +19,7 @@ const routes = [
   { path: "/", element: <Home /> },
   {
     path: "/cursos",
-    element: <Cursos title={"Gestión de Cursos"} accion="" />,
+    element: <Cursos title={"Gestión de Cursos"} accion={"gestionar"} />,
   },
   {
     path: "/students",

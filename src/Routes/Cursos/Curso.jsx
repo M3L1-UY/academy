@@ -325,7 +325,7 @@ export default function Curso({ curso, edit, riviewList }) {
         error ? (
           errorMessage()
         ) : (
-          <div className="container pt-5 px-5 pb-3">
+          <div className="container pt-5 px-5 pb-3 ">
 
             <form onSubmit={handleSubmit} encType="multipart/form-data">
               <section className="courseSection">
@@ -539,14 +539,14 @@ export default function Curso({ curso, edit, riviewList }) {
                 </aside>
               </section>
 
-              <div className="btn-submit">
-                {edit ? (
-                  <button type="submit" className="form-button">
-                    Actualizar
+              <div className="btn-submit mb-3">
+              {edit ? (
+                  <button type="submit" className="form-button "disabled={isSubmitted}>
+                    {isSubmitted ? "Actualizando..." : "Actualizar"}
                   </button>
                 ) : (
-                  <button type="submit" className="form-button">
-                    Agregar
+                  <button type="submit" className="form-button" disabled={isSubmitted}>
+                    {isSubmitted ? "Espere..." : "Agregar"}
                   </button>
                 )}
               </div>

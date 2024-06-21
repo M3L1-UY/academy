@@ -2,10 +2,11 @@ import React, { useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useUsersContext } from '../../hooks/UsersContext';
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie'; // Importa js-cookie
 
 const Logout = () => {
   const navigate = useNavigate();
-  const { usersContext } = useUsersContext();
+  const { usersContext, setUsersContext } = useUsersContext();
 
   useEffect(() => {
     if (usersContext?.login) {
@@ -20,15 +21,17 @@ const Logout = () => {
       }).then((result) => {
         if (result.isConfirmed) {
           // Llamar a la API de logout
-          fetch('/user/logout', {
+          fetch(`${import.meta.env.VITE_REACT_APP_SERVER_HOST}/api/user/logout`, {
             method: 'POST',
             credentials: 'include', // Para enviar cookies si estás utilizando cookies
           })
             .then((response) => response.json())
             .then((data) => {
               if (data.status === '200') {
+                Cookies.remove('user'); // Eliminar la cookie en el cliente
+                setUsersContext(null); // Limpiar el contexto de usuario
                 Swal.fire('Sesión cerrada', 'Su sesión ha sido cerrada exitosamente', 'success').then(() => {
-                  navigate('/'); 
+                  navigate('/login'); 
                 });
               } else {
                 Swal.fire('Error', 'Hubo un problema al cerrar la sesión', 'error');
@@ -45,7 +48,7 @@ const Logout = () => {
     } else {
       navigate('/');
     }
-  }, [usersContext, navigate]);
+  }, [usersContext, navigate, setUsersContext]);
 
   return null; 
 };

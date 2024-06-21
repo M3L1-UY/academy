@@ -4,16 +4,19 @@ import { useForm } from "../../hooks/useForm";
 import Swal from "sweetalert2";
 import { useAppContext } from "../../hooks/appContext";
 import ValidateErrors from "../../componets/services/ValidateErrors";
-import validationSchema from "../../componets/services/validationSchema";
+import {validationMatriculaSchema} from "../../componets/services/validationSchema";
 
-export default function Curso({ matricula, edit, riviewList }) {
-  const { HandleNivelClose } = useAppContext();
+
+export default function Matricula({ matricula, edit, riviewList }) {
+  const { HandleClose } = useAppContext();
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const api = `${hostServer}/api/matricula`;
   const [teachers, setTeachers] = useState([]);
   const [students, setStudents] = useState([]);
   const [courses, setCourses] = useState([]);
   const [error, setError] = useState(false);
+  const [isSubmitted,setIsSubmitted ] = useState(false);
+  
 
   const initialForm = {
     id: matricula ? matricula._id : 0,
@@ -29,7 +32,7 @@ export default function Curso({ matricula, edit, riviewList }) {
   };
 
   let { formData, onInputChange, validateForm, errorsInput, clearForm, setFormData, convertDateFormat } =
-    useForm(initialForm, validationSchema);
+    useForm(initialForm, validationMatriculaSchema);
 
   const { id, cursoId, cursoNombre, teacherId, teacherNombre, studentId, studentNombre, turno, finicio, ffin } = formData;
 
@@ -43,6 +46,8 @@ export default function Curso({ matricula, edit, riviewList }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const numError = validateForm();
+    setIsSubmitted(true);
 
     if (!formData.cursoId || !formData.teacherId || !formData.studentId || !formData.turno || !formData.finicio || !formData.ffin) {
       Swal.fire({
@@ -54,9 +59,17 @@ export default function Curso({ matricula, edit, riviewList }) {
       });
       return;
     }
-    const numError = validateForm();
-
-    if (!numError) {
+    else if (formData.finicio  > formData.ffin) {
+      Swal.fire({
+        position: "top",
+        icon: "info",
+        title: "La fecha de inicio no puede ser mayor a la fecha de fin",
+        showConfirmButton: false,
+        timer: 5000,
+      });
+      return;
+    }
+  else if(!numError) {
     try {
         let url = `${api}`;
         if (!edit) {
@@ -88,6 +101,9 @@ export default function Curso({ matricula, edit, riviewList }) {
           showConfirmButton: false,
           timer: 3500,
         });
+        HandleClose();
+        setIsSubmitted(false);
+        riviewList();
     } else {
       if (data?.status === 200 || data?.status === 201) {
         data?.data.message &&
@@ -109,13 +125,15 @@ export default function Curso({ matricula, edit, riviewList }) {
           });
       }
       if (data?.status === 200) {
-       HandleNivelClose();
+        HandleClose();
+        setIsSubmitted(false);
         riviewList();
       }
       if (data?.status === 201) {
+        HandleClose();
         clearForm();
-        HandleNivelClose();
-        riviewList(); 
+        setIsSubmitted(false);
+        riviewList();
       }
     }
   }, [data]);
@@ -202,11 +220,10 @@ export default function Curso({ matricula, edit, riviewList }) {
         error ? (
           <div>Error al cargar los datos.</div>
         ) : (
-          <div className="container my-5 px-5">
+          <div className="container pt-3 px-5 pb-3 mb-3 col-md-10 mx-auto">
             <form onSubmit={handleSubmit}>
-              <section>
-                <aside>
-                  <div className="row mt-5">
+
+                  <div className="row mt-2">
                     <div className="form-group col-md-12">
                       <label htmlFor="cursoId">Curso</label>
                       <select
@@ -223,12 +240,15 @@ export default function Curso({ matricula, edit, riviewList }) {
                           >{`${item.nombre}`}</option>
                         ))}
                       </select>
+                      {isSubmitted && errorsInput.cursoId && (
+                    <ValidateErrors errors={errorsInput.cursoId} />
+                  )}
                     </div>
                   </div>
 
                   <div className="row mt-3">
                     <div className="form-group col-md-12">
-                      <label htmlFor="teacherId">Profesor Asignado al Curso</label>
+                      <label htmlFor="teacherId">Profesor</label>
                       <select
                         name="teacherId"
                         className="form-control"
@@ -245,6 +265,9 @@ export default function Curso({ matricula, edit, riviewList }) {
                           )
                         )}
                       </select>
+                      {isSubmitted && errorsInput.teacherId && (
+                    <ValidateErrors errors={errorsInput.teacherId} />
+                  )}
                     </div>
                   </div>
 
@@ -265,6 +288,9 @@ export default function Curso({ matricula, edit, riviewList }) {
                           >{`${item.nombre} ${item.apellido}`}</option>
                         ))}
                       </select>
+                      {isSubmitted && errorsInput.studentId && (
+                    <ValidateErrors errors={errorsInput.studentId} />
+                  )}
                     </div>
                   </div>
 
@@ -282,6 +308,9 @@ export default function Curso({ matricula, edit, riviewList }) {
                         <option value="Vespertino">Vespertino</option>
                         <option value="Nocturno">Nocturno</option>
                       </select>
+                      {isSubmitted && errorsInput.turno && (
+                    <ValidateErrors errors={errorsInput.turno} />
+                  )}
                     </div>
                     <div className="form-group col-md-6">
                       <label htmlFor="finicio">Fecha de Inicio</label>
@@ -294,6 +323,9 @@ export default function Curso({ matricula, edit, riviewList }) {
                         value={convertDateFormat(finicio)}
                         onChange={onInputChange}
                       />
+                       {isSubmitted && errorsInput.finicio && (
+                    <ValidateErrors errors={errorsInput.finicio} />
+                  )}
                     </div>
                   </div>
 
@@ -309,19 +341,22 @@ export default function Curso({ matricula, edit, riviewList }) {
                         value={convertDateFormat(ffin)}
                         onChange={onInputChange}
                       />
+                                        {isSubmitted && errorsInput.ffin && (
+                    <ValidateErrors errors={errorsInput.ffin} />
+                  )}
                     </div>
+                    
                   </div>
-                </aside>
-              </section>
 
-              <div className="btn-submit">
-                {edit ? (
-                  <button type="submit" className="btn btn-primary w-100">
-                    Actualizar
+
+              <div className="btn-submit mt-5">
+              {edit ? (
+                  <button type="submit" className="form-button "disabled={isSubmitted}>
+                    {isSubmitted ? "Actualizando..." : "Actualizar"}
                   </button>
                 ) : (
-                  <button type="submit" className="btn btn-success w-100">
-                    Agregar
+                  <button type="submit" className="form-button" disabled={isSubmitted}>
+                    {isSubmitted ? "Espere..." : "Agregar"}
                   </button>
                 )}
               </div>

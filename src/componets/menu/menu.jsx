@@ -1,8 +1,10 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./menu.css"; // Archivo CSS donde definiremos los estilos
+import { useUsersContext } from "../../hooks/UsersContext";
 
 function MenuItem({ item }) {
+  const { usersContext } = useUsersContext();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => {
@@ -20,6 +22,17 @@ function MenuItem({ item }) {
     } else {
       return null; // Si hay subItems, no redirige a ninguna parte
     }
+  };
+
+  const getSessionMessage = () => {
+    if (usersContext?.role === 'isAdmin') {
+      return "Sesión de administrador";
+    } else if (usersContext?.role === 'isStudent') {
+      return "Sesión de estudiante";
+    } else if (usersContext?.role === 'isTeacher') {
+      return "Sesión de profesor";
+    }
+    return null;
   };
 
   return (
@@ -53,7 +66,10 @@ function MenuItem({ item }) {
     </div>
   );
 }
+
 function Menu() {
+  const { usersContext } = useUsersContext();
+
   const menuItems = [
     {
       title: "Home",
@@ -87,18 +103,30 @@ function Menu() {
     },
     {
       title: "Accesos",
-      subItems: [
-        { title: "Inicio Sesión", route: "/login" },
-        { title: "Cambio de Clave", route: "/cambioClave" },
-        { title: "Salir", route: "/salir" },
-      ],
+      subItems: usersContext?.login
+        ? [
+            { title: "Cambiar Clave", route: "/cambioClave" },
+            { title: "Salir", route: "/salir" },
+          ]
+        : [
+            { title: "Iniciar Sesión", route: "/login" },
+          ],
     },
   ];
 
   const [isExpanded, setIsExpanded] = useState(false);
   const menuRef = useRef(null);
 
-
+  const getSessionMessage = () => {
+    if (usersContext?.role === 'isAdmin') {
+      return "Sesión de administrador";
+    } else if (usersContext?.role === 'isStudent') {
+      return "Sesión de estudiante";
+    } else if (usersContext?.role === 'isTeacher') {
+      return "Sesión de profesor";
+    }
+    return null;
+  };
 
   const toggleMenu = () => {
     setIsExpanded(!isExpanded);
@@ -106,11 +134,21 @@ function Menu() {
 
   return (
     <>
-    <div className="menu" ref={menuRef}>
-      {menuItems.map((item) => (
-        <MenuItem key={item.title} item={item} />
-      ))}
-    </div>
+      <div className="menu " ref={menuRef}>
+        {menuItems.map((item) => (
+          <MenuItem className="" key={item.title} item={item} />
+        ))}
+        {usersContext?.login && (
+          <>
+            <p className="m-8 text-white text-uppercase text-center fw-bold x-small">
+              {getSessionMessage()}
+            </p>
+            <p className="text-white text-center x-small">
+              Sr(a) {usersContext?.nombre} {usersContext?.apellido}
+            </p>
+          </>
+        )}
+      </div>
     </>
   );
 }

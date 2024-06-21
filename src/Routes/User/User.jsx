@@ -9,8 +9,6 @@ import validationSchema from "../../componets/services/validationSchema";
 import AccessProfil from "../../componets/services/AccessProfil";
 
 export default function User({ user, edit, riviewList }) {
-  // AccessProfil("isAdmin");
- // const {usersContext} = useUsersContext(); //////////// disabled = {usersContext.role = }
   const { HandleClose } = useAppContext();
   const [isSubmitted, setIsSubmitted] = useState(false);
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
@@ -175,10 +173,10 @@ export default function User({ user, edit, riviewList }) {
         error ? (
           errorMessage()
         ) : (
-          <div className="container p-5">
+          <div className="container pt-3 px-5 pb-3 col-md-10 mx-auto">
             <form>
               <div className="row">
-                <div className="form-group col-md-6 mx-auto">
+                <div className="form-group col-md-6 mt-2 mb-3 mx-auto">
                 <label htmlFor="dni">Documento de Identidad *</label>
                   <input
                     type="text"
@@ -195,8 +193,8 @@ export default function User({ user, edit, riviewList }) {
                 </div>
               </div>
               <div className="row">
-                <div className="form-group col-md-6">
-                  <label htmlFor="nombre">Nombres</label>
+                <div className="form-group col-md-6 mt-2">
+                  <label htmlFor="nombre">Nombres *</label>
                   <input
                     type="text"
                     className="form-control"
@@ -209,8 +207,8 @@ export default function User({ user, edit, riviewList }) {
                     <ValidateErrors errors={errorsInput.nombre} />
                   )}
                 </div>
-                <div className="form-group col-md-6">
-                  <label htmlFor="inputName">Apellidos</label>
+                <div className="form-group col-md-6 mt-2">
+                  <label htmlFor="inputName">Apellidos *</label>
                   <input
                     type="text"
                     className="form-control"
@@ -224,9 +222,9 @@ export default function User({ user, edit, riviewList }) {
                   )}
                 </div>
               </div>
-              <div className="row mt-3">
-                <div className="form-group col-md-6">
-                  <label htmlFor="email">Correo Electrónico</label>
+              <div className="row">
+                <div className="form-group col-md-6 mt-2">
+                  <label htmlFor="email">Correo Electrónico *</label>
                   <input
                     type="email"
                     className="form-control"
@@ -239,8 +237,8 @@ export default function User({ user, edit, riviewList }) {
                     <ValidateErrors errors={errorsInput.email} />
                   )}
                 </div>
-                <div className="form-group col-md-6">
-                  <label htmlFor="role">Rol</label>
+                <div className="form-group col-md-6 mt-2">
+                  <label htmlFor="role">Rol *</label>
                   <select
                     className="form-control"
                     name="role"
@@ -263,9 +261,9 @@ export default function User({ user, edit, riviewList }) {
                   )}
                 </div>
               </div>
-              <div className="row mt-3">
-                <div className="form-group col-md-6">
-                  <label htmlFor="password">Contraseña</label>
+              <div className="row">
+                <div className="form-group col-md-6 mt-2">
+                  <label htmlFor="password">Contraseña *</label>
                   <input
                     type="password"
                     autoComplete="on"
@@ -279,9 +277,9 @@ export default function User({ user, edit, riviewList }) {
                     <ValidateErrors errors={errorsInput.password} />
                   )}
                 </div>
-                <div className="form-group col-md-6">
+                <div className="form-group col-md-6 mt-2">
                   <label htmlFor="confirmPassword">
-                    Confirmación de Contraseña
+                    Confirmación de Contraseña *
                   </label>
                   <input
                     type="password"
@@ -297,8 +295,8 @@ export default function User({ user, edit, riviewList }) {
                   )}
                 </div>
               </div>
-              <div className="form-group">
-                <label htmlFor="address">Dirección</label>
+              <div className="form-group mt-2">
+                <label htmlFor="address">Dirección *</label>
                 <input
                   type="text"
                   className="form-control"
@@ -311,8 +309,8 @@ export default function User({ user, edit, riviewList }) {
                     <ValidateErrors errors={errorsInput.address} />
                   )}
               </div>
-              <div className="row mt-3">
-                <div className="form-group col-md-4">
+              <div className="row">
+                <div className="form-group col-md-4 mt-2">
                   <label htmlFor="ciudad">Ciudad</label>
                   <input
                     type="text"
@@ -322,7 +320,7 @@ export default function User({ user, edit, riviewList }) {
                     onChange={onInputChange}
                   />
                 </div>
-                <div className="form-group col-md-4">
+                <div className="form-group col-md-4 mt-2">
                   <label htmlFor="condicion">Estado *</label>
                   <select
                     name="condicion"
@@ -343,7 +341,7 @@ export default function User({ user, edit, riviewList }) {
                     <ValidateErrors errors={errorsInput.condicion} />
                   )}
                 </div>
-                <div className="form-group col-md-4">
+                <div className="form-group col-md-4 mt-2">
                   <label htmlFor="celular">Celular</label>
                   <input
                     type="text"
@@ -358,7 +356,7 @@ export default function User({ user, edit, riviewList }) {
                   )}
                 </div>
               </div>
-              <div className="btn-submit mt-4">
+              <div className="btn-submit mt-5 mb-lg-3">
                 {edit ? (
                   <button
                     onClick={handleSubmit}

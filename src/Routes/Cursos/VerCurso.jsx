@@ -1,13 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useFetch } from "../../hooks/useFetch";
 import { useForm } from "../../hooks/useForm";
-
+import StarRating from "../Hone/StarRating";
 import Swal from "sweetalert2";
 import { useAppContext } from "../../hooks/appContext";
 import validationSchema from "../../componets/services/validationSchema";
 import "../../home.css";
 
-export default function VerCurso({ curso }) {
+
+export default function VerCurso({ curso , accion}) {
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const { HandleNivelClose } = useAppContext();
   const api = `${hostServer}/api/course`;
@@ -20,6 +21,8 @@ export default function VerCurso({ curso }) {
     descripcion: curso ? curso.descripcion : "",
     costo: curso ? curso.costo : "",
     condicion: curso ? curso.condicion : "",
+    duracion: curso ? curso.duracion : "",
+    clasificacion: curso ? curso.clasificacion : "",
   };
   const [imageCourse, setImageCourse] = useState(null);
   const [urlImageCourse, setUrlImageCourse] = useState(
@@ -51,7 +54,7 @@ export default function VerCurso({ curso }) {
   let { formData, onInputChange, validateForm, errorsInput, clearForm } =
     useForm(initialForm, validationSchema);
 
-  const { id, codigo, nombre, descripcion, costo, condicion } = formData;
+  const { id, codigo, nombre, descripcion, costo, condicion, duracion, clasificacion } = formData;
 
   let {
     data,
@@ -145,8 +148,6 @@ export default function VerCurso({ curso }) {
       );
       const costoHoraAnteriorVacio =
         prevProfesores[id - 2] && !prevProfesores[id - 2].costoHora;
-      // const profesorVacio =
-      //   prevProfesores[id - 1] && !prevProfesores[id - 1].profesor;
 
       if (nombreExistente || costoHoraAnteriorVacio) {
         if (costoHoraAnteriorVacio) {
@@ -182,187 +183,72 @@ export default function VerCurso({ curso }) {
   return (
     <>
       {
-        // isLoading ? (
-        // <h3>Cargando...</h3>
-        // ) :
         error ? (
           errorMessage()
         ) : (
           <div className="container py-3 px-5">
             <form onSubmit={handleSubmit}>
-              <section className="courseVerSection">
-                <aside className="px-2">
-                  <div className="row  mb-2">
-                    <div className="form-group col-md-12">
-                      <label className="title-camp">El curso denominado </label>
-                      <br />
-                      <label className="detail-camp">{nombre} </label>
-                    </div>
-                  </div>
-                  <div className="row  mb-2">
-                    <div className="form-group col-md-12">
-                      <label className="title-camp">
-                        Identificado con el Código{" "}
-                      </label>
-                      <br />
-                      <label className="detail-camp"> {codigo} </label>
-                    </div>
-                  </div>
+              <section className="courseVerSection row mt-3 mb-5">
+                <div className="col-md-12  mx-auto">
+                  <h2 className="text-primary mb-4">{nombre}</h2>
+                  <h3 className="text-secondary ">Código: {codigo}</h3>
+                </div>
 
-                  <div className="row  mb-2">
-                    <div className="form-group col-md-12">
-                      <label className="title-camp">Tiene un costo de </label>
-                      <br />
-                      <label className="detail-camp">{costo}</label>
-                      <label className="detail-camp"> dolares</label>
-                    </div>
-                  </div>
+                <div className="imageContainerDiv row mb-5">
+                  <img
+                    src={urlImageCourse}
+                    alt="file"
+                    className="upLoadImg"
+                  />
+                </div>
 
-                  <div className="row  mb-2">
-                    <div className="form-group col-md-12">
-                      <label className="title-camp">
-                        Para este momento tiene un Estátus
-                      </label>
-                      <br />
-                      <label className="detail-camp">{condicion}</label>
-                    </div>
-                  </div>
-                  <div className="row  mb-2">
-                    <label className="title-camp">
-                      Los Profesores asignados al curso son;{" "}
-                    </label>
-                    <br />
-                    <br />
-                    {profesores.map((profesor) => (
-                      <div
-                        key={profesor.id}
-                        className="form-group col-md-6 mb-3"
-                      >
-                        <label className="title-camp">
-                          Profesor {profesor.id}
-                        </label>
-                        <br />
-                        <label
-                          htmlFor={`nombre-${profesor.id}`}
-                          className="detail-camp"
-                        >
-                          {profesor.profesor}
-                        </label>
-                        <br />
-
-                        <label className="title-camp">
-                          El costo hora de su servicio es
-                        </label>
-                        <br />
-                        <label
-                          htmlFor={`costoHora-${profesor.id}`}
-                          className="detail-camp"
-                        >
-                          {profesor.costoHora}
-                        </label>
-                        <label className="detail-camp"> dolares</label>
+                <div className="d-flex flex-row justify-content-evenly col-md-12 mx-auto ">
+                      <div className="d-flex flex-column align-items-center mb-3">
+                        <h5 className="text-dark mb-0 ">Costo</h5>
+                        <p className="lead text-success mb-0">${costo} USD</p>
                       </div>
-                    ))}
-                  </div>
-                </aside>
-                <aside>
-                  <div className="form-group col-md-12">
-                    <div className="form-group col-md-12">
-                      <label className="title-camp">
-                        La descripción detallada de las herremienta que
-                        aprenderas en el curso son;
-                      </label>
-                      <textarea
-                        rows={20}
-                        type="text"
-                        className="form-control"
-                        name="descripcion"
-                        placeholder="Indique los detalles del curso"
-                        value={descripcion}
-                        readOnly
-                      />
+                      <div className="d-flex flex-column align-items-center mb-3">
+                        <h5 className="text-dark mb-0">Estado</h5>
+                        <p className="lead text-info mb-0">{condicion}</p>
+                      </div>
+                      <div className="d-flex flex-column align-items-center mb-3">
+                        <h5 className="text-dark mb-0">Duración</h5>
+                        <p className="lead text mb-0">{duracion} meses</p>
+                      </div>
+                      </div>
+                     
+ <div className="d-flex flex-row justify-content-center">
+                        <div className="text-info lead p-2 bg-dark rounded mb-3">
+                          <StarRating rating={clasificacion} />
+                        </div>
+                      </div>
+
+                <div className="d-flex justify-content-center align-items-center">
+                  
+                <div className="p-3 text-center bg-dark rounded text-light ">
+                  <div className="form-group col-md-12 ">
+                    <label className="title-camp mb-2">
+                      Descripción detallada del curso:
+                    </label>
+                    <div className="course-description text-dark">
+                      {descripcion}
                     </div>
                   </div>
-                </aside>
+                  </div>
+                  </div>
+                <div className="d-flex justify-content-center align-items-center mt-2">
+                  <h5 className="text-dark me-2 mb-0">Profesores:</h5>
+                  {profesores.map((profesor) => (
+                    <div key={profesor.id}>
+                      <p className="lead text-dark mb-0">{profesor.profesor}</p>
+                    </div>
+                  ))}
+                </div>
               </section>
-              <div className="mt-2 flex items-center">
-                <span className="inline-block h-8 w-8 rounded-full overflow-hidden">
-                  {imageCourse ? (
-                    <img
-                      src={URL.createObjectURL(imageCourse)}
-                      alt="file"
-                      className="upLoadImg"
-                    />
-                  ) : (
-                    <img
-                      src={`${hostServer}${urlImageCourse}`}
-                      alt="file"
-                      className="upLoadImg"
-                    />
-                  )}
-                </span>
-              </div>
             </form>
           </div>
         )
       }
     </>
   );
-}/*
-<form onSubmit={handleSubmit}>
-            <section className="courseVerSection row">
-              <aside className="col-md-6 px-2">
-                <div className="mb-4">
-                  <h2 className="text-primary">{nombre}</h2>
-                  <h4 className="text-secondary">Código: {codigo}</h4>
-                </div>
-                <div className="mb-3">
-                  <h5 className="text-dark">Costo:</h5>
-                  <p className="lead text-success">${costo} USD</p>
-                </div>
-                <div className="mb-3">
-                  <h5 className="text-dark">Estado:</h5>
-                  <p className="lead text-info">{condicion}</p>
-                </div>
-                <div className="mb-4">
-                  <h5 className="text-dark">Profesores:</h5>
-                  {profesores.map((profesor) => (
-                    <div key={profesor.id} className="mb-3">
-                      <h6 className="text-dark">Profesor {profesor.id}:</h6>
-                      <p className="text-muted">{profesor.profesor}</p>
-                      <p className="text-muted">Costo por hora: ${profesor.costoHora} USD</p>
-                    </div>
-                  ))}
-                </div>
-              </aside>
-              <aside className="col-md-6">
-                <div className="mb-4">
-                  <h5 className="text-dark">Descripción del Curso:</h5>
-                  <textarea
-                    rows={10}
-                    className="form-control"
-                    name="descripcion"
-                    placeholder="Indique los detalles del curso"
-                    value={descripcion}
-                    readOnly
-                  />
-                </div>
-                <div className="mb-4 text-center">
-                  <h5 className="text-dark">Imagen del Curso:</h5>
-                  {imageCourse ? (
-                    <img
-                      src={URL.createObjectURL(imageCourse)}
-                      alt="file"
-                      className="img-fluid rounded"
-                    />
-                  ) : (
-                    <img
-                      src={`${hostServer}${urlImageCourse}`}
-                      alt="file"
-                      className="img-fluid rounded"
-                    />
-                  )}
-                </div>
-              </aside>
-            </section>
-          </form>*/
+}

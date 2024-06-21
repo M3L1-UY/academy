@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { useFetch } from "../../hooks/useFetch";
 import { useForm } from "../../hooks/useForm";
-
 import Swal from "sweetalert2";
 import { useAppContext } from "../../hooks/appContext";
 import ValidateErrors from "../../componets/services/ValidateErrors";
@@ -28,7 +27,7 @@ export default function Contact({ contact, edit, riviewList }) {
 
   const { formData, onInputChange, validateForm, errorsInput, clearForm } =
     useForm(initialForm, validationContactSchema);
-
+    
   const { id, nombre, email, celular, comentario, ciudad, curso, condicion } =
     formData;
 
@@ -76,6 +75,7 @@ export default function Contact({ contact, edit, riviewList }) {
           showConfirmButton: false,
           timer: 3500,
         });
+       
     } else {
       if (data?.status === 200 || data?.status === 201) {
         data?.data.message &&
@@ -104,6 +104,7 @@ export default function Contact({ contact, edit, riviewList }) {
         clearForm();
         // riviewList();
       }
+      setIsSubmitted(false);
     }
   }, [data]);
 
@@ -133,10 +134,11 @@ export default function Contact({ contact, edit, riviewList }) {
           <div className="container">
             <form onSubmit={handleSubmit} className="form-initial-div col-md-10 mx-auto">
             <h3 className="form-titulo">Contacto</h3>
-            <div className="form-content">
-              <div className="row mt-2">
-                <div className="form-group col-md-6">
-                  <label htmlFor="nombre">Nombre</label>
+            <div className="form-content container p-5">
+  
+              <div className="row">
+                <div className="form-group col-md-6 mt-2">
+                  <label htmlFor="nombre">Nombre *</label>
                   <input
                     type="text"
                     className="form-control"
@@ -149,8 +151,8 @@ export default function Contact({ contact, edit, riviewList }) {
                     <ValidateErrors errors={errorsInput.nombre} />
                   )}{" "}
                 </div>
-                <div className="form-group col-md-6">
-                  <label htmlFor="email">Correo</label>
+                <div className="form-group col-md-6 mt-2">
+                  <label htmlFor="email">Correo *</label>
                   <input
                     type="email"
                     className="form-control"
@@ -164,9 +166,9 @@ export default function Contact({ contact, edit, riviewList }) {
                   )}
                 </div>
               </div>
-              <div className="row  mt-2">
-                <div className="form-group col-md-6">
-                  <label htmlFor="celular">Celular</label>
+              <div className="row">
+                <div className="form-group col-md-6 mt-2">
+                  <label htmlFor="celular">Celular *</label>
                   <input
                     type="text"
                     className="form-control"
@@ -179,7 +181,7 @@ export default function Contact({ contact, edit, riviewList }) {
                     <ValidateErrors errors={errorsInput.celular} />
                   )}{" "}
                 </div>
-                <div className="form-group col-md-6">
+                <div className="form-group col-md-6 mt-2">
                   <label htmlFor="ciudad">Ciudad</label>
                   <input
                     type="text"
@@ -192,9 +194,9 @@ export default function Contact({ contact, edit, riviewList }) {
                 </div>
               </div>
 
-              <div className="row  mt-2">
-                <div className="form-group col-md-6 mx-auto">
-                  <label htmlFor="curso">Cursos Disponibles</label>
+              <div className="row">
+                <div className="form-group col-md-6 mx-auto mt-4">
+                  <label htmlFor="curso">Cursos Disponibles *</label>
                   <select
                     name="curso"
                     className="form-control"
@@ -217,7 +219,7 @@ export default function Contact({ contact, edit, riviewList }) {
 
               <div className="row mt-2">
               <div className="form-group col-md-12">
-                <label htmlFor="comentario">Comentario</label>
+                <label htmlFor="comentario">Comentario *</label>
                 <textarea
                   // type="textarea"
                   className="form-control"
@@ -233,18 +235,18 @@ export default function Contact({ contact, edit, riviewList }) {
                 </div>
               </div>
 
-              <div className="btn-submit  mt-3">
+              <div className="btn-submit mt-4 mb-1">
                 {edit ? (
-                  <button type="submit" className="form-button">
-                    Actualizar
+                  <button type="submit" className="form-button "disabled={isSubmitted}>
+                    {isSubmitted ? "Actualizando..." : "Actualizar"}
                   </button>
                 ) : (
-                  <button type="submit" className="form-button">
-                    Agregar
+                  <button type="submit" className="form-button" disabled={isSubmitted}>
+                    {isSubmitted ? "Enviando..." : "Enviar"}
                   </button>
                 )}
               </div>
-              </div>
+              </div>   
             </form>
           </div>
         </>

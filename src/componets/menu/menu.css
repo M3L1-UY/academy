@@ -1,7 +1,7 @@
 .menuItem {
   padding: 5px 16px;
   margin: 12px;
-  background-color:rgb(255, 255, 255);
+  background-color:rgb(234, 251, 254);
   border-radius: 5px;
   border: none;
   cursor: pointer;
@@ -11,7 +11,7 @@
 }
 
 .menuItem:hover {
-  background-color: rgb(234, 251, 254);
+  background-color: rgb(255, 255, 255);
 }
 
 .submenuItem {
@@ -23,14 +23,15 @@
   font-weight: 300;
   color: black;
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  background-color: rgb(234, 251, 254);
+
   
 }
+
 
 .submenuItem:hover {
   background-color: rgba(90, 173, 199, 0.645);/* Color de fondo al hacer hover */
   cursor: pointer;
-  font-weight: 600;
+
 }
 
 .submenu {

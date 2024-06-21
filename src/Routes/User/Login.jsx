@@ -7,8 +7,10 @@ import ValidateErrors from "../../componets/services/ValidateErrors";
 import { useUsersContext } from "../../hooks/UsersContext";
 import { useFetch } from "../../hooks/useFetch";
 import { useForm } from "../../hooks/useForm";
+import Cookies from "js-cookie"; 
 
 const Login = () => {
+  
   const navigate = useNavigate();
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const api = `${hostServer}/api/user/login`;
@@ -48,6 +50,7 @@ const Login = () => {
   useEffect(() => {
     if (data?.status === 200) {
       setUsersContext(data.data.data);
+      Cookies.set("user", JSON.stringify(data.data.data), { expires: 7 }); 
       navigate("/");
     } else if (data?.status === 400) {
       Swal.fire({
@@ -76,11 +79,11 @@ const Login = () => {
     <div className="container mt-4 w-full h-full">
       <div className="row justify-content-center">
         <div className="col-lg-6">
-          <h3 className="text-center mb-4 text-2xl font-bold">Iniciar sesión</h3>
-          <div className="p-5 card shadow w-100">
+          <p className="form-titulo justify-content-center">Iniciar sesión</p>
+          <div className="container p-5 card shadow w-100">
             <div className="card-body">
               <form onSubmit={handleSubmit}>
-                <div className="mb-3">
+                <div className="">
                   <label htmlFor="email" className="text-center">Correo electrónico</label>
                   <input
                     type="email"
@@ -92,7 +95,7 @@ const Login = () => {
                   />
                   {errorsInput.email && <ValidateErrors errors={errorsInput.email} />}
                 </div>
-                <div className="mb-3">
+                <div className="mb-3 mt-3">
                   <label htmlFor="password">Contraseña</label>
                   <div className="input-group">
                     <input
@@ -113,7 +116,7 @@ const Login = () => {
                   </div>
                 </div>
 
-                <div className="text-center mt-4">
+                <div className="text-center mt-5 mb-0">
                   <button type="submit" className="form-button" disabled={isSubmitting}>
                     {isSubmitting ? "Enviando..." : "Enviar"}
                   </button>

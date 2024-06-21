@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
-import openModal from "../../componets/modal/OpenModal";
 import Pagination from "../../componets/services/Pagination ";
-import Contact from "./Contact";
 import Buscador from "../../componets/Buscador";
 import { useAppContext } from "../../hooks/appContext";
 import Swal from "sweetalert2";
 import { useFetch } from "../../hooks/useFetch";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt, FaCheckCircle, FaRegCircle } from "react-icons/fa";
+import AccessProfil from "../../componets/services/AccessProfil";
 import { TbEdit } from "react-icons/tb";
 import { IoMdAdd } from "react-icons/io";
 import { useForm } from "../../hooks/useForm";
 
 export default function ListContacts({ title, accion }) {
+  AccessProfil("isAdmin");
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const { HandleClose } = useAppContext();
   const url = `${hostServer}/api/contacts`;
   const [selectedItems, setSelectedItems] = useState([]);
   const [page, setPage] = useState(1);
   const [itemsPage, setItemsPage] = useState(8);
-  const { data, isLoading, getData, deleteData } = useFetch(url);
+  const { data, isLoading, getData, updateData, deleteData } = useFetch(url);
   const bgChange = true;
   const modalNivel = 1;
   const filters = [
@@ -27,25 +27,47 @@ export default function ListContacts({ title, accion }) {
   ];
 
   let { convertDateFormat } =  useForm();
-  // Función para formatear la fecha en formato dd/MM/yyyy HH:mm:ss
- 
 
-  function handleEdit(contact) {
-    const tittle = "Edición de Contacts";
-    openModal(
-      <Contact contact={contact} edit={true} riviewList={updateList} />,
-      HandleClose,
-      "medio",
-      tittle,
-      modalNivel,
-      bgChange
-    );
+  const handleEdit = async (id) => {
+    const url = `${hostServer}/api/contact`;
+    Swal.fire({
+      title: "¿Está seguro?",
+      text: "¿Desea modificar el estado?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, confirmar!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const modificar = async () => {
+            const resp = await updateData(url, id, null);
+            await getContacts();
+            await    Swal.fire({
+              title: "Realizado!",
+              text: "El estado fue modificado.",
+              icon: "success",
+            });
+          };
+          modificar();
+          
+        } catch (error) {
+          Swal.fire({
+            title: "Error!",
+            text: error.message || "Hubo un error al modificar el contacto.",
+            icon: "error",
+          });
+        }
+      }
+    });
   }
 
   const updateList = async () => {
     await getContacts();
   };
   const handleDel = async (id) => {
+    AccessProfil();
     const url = `${hostServer}/api/contact`;
     const delId = id;
     Swal.fire({
@@ -55,7 +77,7 @@ export default function ListContacts({ title, accion }) {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Sí, Eliminar!",
+      confirmButtonText: "Si, Eliminar!",
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
@@ -101,13 +123,14 @@ export default function ListContacts({ title, accion }) {
     try {
       const url = `${hostServer}/api/contacts`;
       const result = await getData(url);
+      console.log(result)
            } catch (error) {
       console.error("Error fetching contacts:", error);
     }
   };
 
   useEffect(() => {
-    getContacts(); // Llamar a la función para obtener los contactos
+    getContacts(); 
   }, []);
 
   return (
@@ -138,6 +161,7 @@ export default function ListContacts({ title, accion }) {
                     <th scope="col">Nombre</th>
                     <th scope="col">Correo Electrónico</th>
                     <th scope="col">Comentario</th>
+                    <th scope="col">Estado</th>
                     <th scope="col" colSpan={2}>
                       Acción
                     </th>
@@ -160,10 +184,17 @@ export default function ListContacts({ title, accion }) {
                         <td>{contact.email}</td>
                         <td>{contact.comentario}</td>
                         <td>
+                              {contact.done ? (
+                                <FaCheckCircle style={{ color: "green", fontSize: "20px" }} />
+                              ) : (
+                                <FaRegCircle style={{ color: "red", fontSize: "20px" }} />
+                              )}
+                            </td>
+                        <td>
                           <TbEdit
                             className="btnShow"
                             style={{ fontSize: "25px" }}
-                            onClick={() => handleEdit(contact)}
+                            onClick={() => handleEdit(contact._id)}
                           />
                         </td>
                         <td>

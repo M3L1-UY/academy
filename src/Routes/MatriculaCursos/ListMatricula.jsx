@@ -3,7 +3,7 @@ import openModal from "../../componets/modal/OpenModal";
 import Pagination from "../../componets/services/Pagination ";
 import Matricula from "./Matricula";
 import Buscador from "../../componets/Buscador";
-
+import AccessProfil from "../../componets/services/AccessProfil";
 import Swal from "sweetalert2";
 import { useState } from "react";
 import { useFetch } from "../../hooks/useFetch";
@@ -13,8 +13,9 @@ import { IoMdAdd } from "react-icons/io";
 import { useAppContext } from "../../hooks/appContext";
 
 export default function ListMatricula({ title }) {
+  AccessProfil("isTeacher");
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
-  const { HandleNivelClose } = useAppContext();
+  const { HandleClose } = useAppContext();
 
   const url = `${hostServer}/api/matriculas`;
   const [selectedItems, setSelectedItems] = useState([]);
@@ -22,7 +23,7 @@ export default function ListMatricula({ title }) {
   const [itemsPage, setItemsPage] = useState(8);
   let { data, isLoading, getData, deleteData } = useFetch(`${url}`);
   const bgChange = true;
-  const modalNivel = 2;
+  const modalNivel = 1;
   const filters = [
     { id: 1, nombre: "cursoNombre", descrip: "Curso" },
     { id: 2, nombre: "teacherNombre", descrip: "Profesor" },
@@ -33,7 +34,7 @@ export default function ListMatricula({ title }) {
     const tittle = "Adición de Matrícula";
     openModal(
       <Matricula matricula={""} edit={false} riviewList={updateList} />,
-      HandleNivelClose,
+      HandleClose,
       "small",
       tittle,
       modalNivel,
@@ -45,7 +46,7 @@ export default function ListMatricula({ title }) {
     const tittle = "Edición de Matrícula";
     openModal(
       <Matricula matricula={matricula} edit={true} riviewList={updateList} />,
-      HandleNivelClose,
+      HandleClose,
       "small",
       tittle,
       modalNivel,

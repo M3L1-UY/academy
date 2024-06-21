@@ -113,4 +113,32 @@ export const validationContactSchema = {
   ],
 };
 
+export const validationMatriculaSchema = {
+  cursoId: [
+    (value) => (value.trim() === "" ? "El curso es requerido" : undefined),
+  ],
+  teacherId: [
+    (value) => (value.trim() === "" ? "El profesor es requerido" : undefined),
+  ],
+  studentId: [
+    (value) => (value.trim() === "" ? "El estudiante es requerido" : undefined),
+  ],
+  turno: [
+    (value) => (value.trim() === "" ? "El turno es requerido" : undefined),
+  ],
+  finicio: [
+      (value) => (value.trim() === "" ? "La fecha de inicio es requerida": undefined),
+      (value) =>(value.trim() !== "" && !isValidDate(value) ? "La fecha de inicio no es válida": undefined),
+  ],
+  ffin: [
+    (value) => (value.trim() === "" ? "La fecha de finalización es requerida": undefined),
+    (value) => (value.trim() !== "" && !isValidDate(value) ? "La fecha de finalización no es válida" : undefined),
+  ],
+};
+
 export default validationSchema;
+
+function isValidDate(date) {
+  const timestamp = Date.parse(date);
+  return !isNaN(timestamp);
+}

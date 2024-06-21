@@ -100,6 +100,32 @@ export default function ListUser({ title }) {
      await getData(api);
   };
 
+  const translateRole = (role) => {
+    switch (role) {
+      case "isTeacher":
+        return "Profesor";
+      case "isAdmin":
+        return "Administrador";
+      case "isStudent":
+        return "Estudiante";
+      default:
+        return "Desconocido";
+    }
+  };
+
+  const getRoleClass = (role) => {
+    switch (role) {
+      case "isTeacher":
+        return "text-primary role-style"; // Azul
+      case "isAdmin":
+        return "text-danger role-style"; // Rojo
+      case "isStudent":
+        return "text-success role-style"; // Verde
+      default:
+        return "";
+    }
+  };
+
   useEffect(() => {
     if (data?.message || data?.message != undefined) {
       Swal.fire(data?.message);
@@ -138,10 +164,10 @@ export default function ListUser({ title }) {
               <table className="table table-striped table-bordered">
                 <thead>
                   <tr className="table-dark">
-                    <th scope="col">#</th>
+                    <th scope="col">Documento</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Correo Electrónico</th>
-                    <th scope="col">Ciudad</th>
+                    <th scope="col">Rol</th>
                     <th scope="col" colSpan={3}>
                       Acción
                     </th>
@@ -165,7 +191,9 @@ export default function ListUser({ title }) {
                           <td>{user.dni}</td>
                           <td>{`${user.nombre} ${user.apellido}`} </td>
                           <td>{user.email}</td>
-                          <td>{user.ciudad}</td>
+                          <td className={getRoleClass(user.role)}>
+                              {translateRole(user.role)}
+                            </td>
                           <td>
                             <TbEdit
                               className=".btnShow"

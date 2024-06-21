@@ -1,18 +1,10 @@
 import img from "../../assets/vertical-market-software.webp";
-import { useUsersContext } from "../../hooks/UsersContext";
-import { useNavigate } from "react-router-dom";
 
 function MainSection() {
-  const { usersContext } = useUsersContext();
   return (
     <>
       {
         <div className="mt-2">
-          {usersContext.login && (
-            <p className="welcome-message">
-              Sesión iniciada por Sr(a) {usersContext.nombre} {usersContext.apellido}
-            </p>
-          )}
           <h3>Bienvenido!</h3>
           <hr />
           <section className="prinSetion">

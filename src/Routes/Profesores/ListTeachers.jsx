@@ -10,9 +10,11 @@ import { useFetch } from "../../hooks/useFetch";
 import { FaTrashAlt } from "react-icons/fa";
 import { TbEdit } from "react-icons/tb";
 import { IoMdAdd } from "react-icons/io";
+import AccessProfil from "../../componets/services/AccessProfil";
 // import "./teacher.css";
 
 export default function ListTeacher({ title }) {
+  AccessProfil();
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const url = `${hostServer}/api/teachers`;
   const { HandleClose } = useAppContext();

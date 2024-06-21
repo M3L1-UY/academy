@@ -4,7 +4,7 @@ import Pagination from "../../componets/services/Pagination ";
 import Student from "./Student";
 import Buscador from "../../componets/Buscador";
 import { useAppContext } from "../../hooks/appContext";
-
+import AccessProfil from "../../componets/services/AccessProfil";
 import Swal from "sweetalert2";
 import { useFetch } from "../../hooks/useFetch";
 import { FaTrashAlt } from "react-icons/fa";
@@ -13,6 +13,7 @@ import { IoMdAdd } from "react-icons/io";
 // import "./student.css";
 
 export default function ListStudent({ title }) {
+  AccessProfil("isAdmin");
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const { HandleClose } = useAppContext();
   const url = `${hostServer}/api/students`;

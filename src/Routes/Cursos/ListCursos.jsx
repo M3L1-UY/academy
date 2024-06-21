@@ -12,8 +12,12 @@ import { FaTrashAlt } from "react-icons/fa";
 import { TbEdit } from "react-icons/tb";
 import { IoMdAdd } from "react-icons/io";
 import { FaRegEye } from "react-icons/fa";
+import AccessProfil from "../../componets/services/AccessProfil";
+import { useNavigate } from "react-router-dom";
 
 export default function ListCurso({ title, accion }) {
+  AccessProfil(accion === "gestionar" ? "isTeacher" : "isAdmin");
+
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const url = `${hostServer}/api/courses`;
   const { HandleClose } = useAppContext();
@@ -65,6 +69,7 @@ export default function ListCurso({ title, accion }) {
       bgChange
     );
   };
+
 
   const updateList = async () => {
     await getCursos();

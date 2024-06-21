@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useRef, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import Cookies from "js-cookie"; // Importar js-cookie
 
 const UsersContext = createContext();
 
@@ -7,7 +8,15 @@ export const useUsersContext = () => {
 };
 
 export const UsersProvider = ({ children }) => {
-  const [usersContext, setUsersContext] = useState([]);
+  const [usersContext, setUsersContext] = useState({});
+
+  useEffect(() => {
+    const storedUser = Cookies.get("user");
+    if (storedUser) {
+      setUsersContext(JSON.parse(storedUser));
+      
+    }
+  }, []);
 
   return (
     <UsersContext.Provider value={{ usersContext, setUsersContext }}>

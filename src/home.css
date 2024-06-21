@@ -85,7 +85,7 @@ header {
   color: white;
     border: 1px solid transparent;
     padding: .375rem .75rem;
-    font-size: 0.8rem;
+    font-size: 1rem;
     line-height: 1.5;
     border-radius: .5rem;
 }
@@ -94,20 +94,22 @@ header {
   background-color: #074a51e7;
 }
 .form-titulo {
+  position: relative;
   background-color:  #074951;
   height: 50px;
   display: flex;
   align-items: center;
   color: white;
   border-radius: 10px 10px 0 0;
-  margin-top: -2px;
   font-size: x-large;
  padding-left: 10px;
  padding-right: 10px;
+ margin-bottom: -8px;
+ z-index: 999
 }
 
 .form-control{
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   color: gray;
 }
 
@@ -186,7 +188,7 @@ header {
   font-family: Arial, sans-serif;
   color: #333;
   border-radius: 5px;
-  margin-top: -20px;
+  margin-top: -10px;
   margin-bottom: 20px;
 }
 

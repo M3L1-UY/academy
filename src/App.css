@@ -117,6 +117,47 @@ label {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch; 
 }
+.role-style {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: smaller;
+}
+.text-primary{
+  text-align: left; 
+font-family: Arial Black; 
+font-weight: bold; 
+font-size: 2.2rem; 
+color: #075d85 !important;
+text-shadow: 0 1px 0 #ddd, 0 2px 0 #ccc, 0 3px 0 #bbb, 0 4px 0 #aaa, 0 5px 0 #acacac, 0 6px 1px rgba(0,0,0,0.1), 0 0 5px rgba(0,0,0,0.1), 0 1px 3px rgba(0,0,0,0.3), 0 3px 5px rgba(0,0,0,0.2), 0 5px 10px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.2), 0 20px 20px rgba(0,0,0,0.15);
+}
+.text-secondary
+{
+  font-weight: bold !important; 
+  font-size: 1.2rem; 
+}
+.course-description {
+  height: auto;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: #f8f9fa; 
+  padding: 1.2rem; 
+  white-space: pre-wrap;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.5) rgba(230, 230, 230, 0.5);
+}
+
+.course-description::-webkit-scrollbar {
+  width: 8px;
+}
+
+.course-description::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 4px;
+}
+
+.course-description::-webkit-scrollbar-track {
+  background-color: rgba(230, 230, 230, 0.5);
+}
 
 .addBtn {
   position: absolute;
@@ -142,7 +183,15 @@ label {
 }
 .pagination {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content:space-between;
+  align-items: center;
+  
+}
+
+.pageSice {
+  display: flex;
+  justify-content: start;
   align-items: center;
 }
 
@@ -150,6 +199,7 @@ label {
   display: flex;
   justify-content: start;
   align-items: center;
+  margin-right: 10px; 
 }
 
 .pagination > ul {
@@ -163,34 +213,57 @@ label {
   font-style: none;
   padding: 5px 10px;
   background-color: rgb(5, 78, 124);
-  background: linear-gradient(to right, #5fa2ff, #867bfe);
+  background: linear-gradient(to bottom, #24a6c3, #025f7e);
   margin: 0 5px;
-  border: 1px solid rgb(5, 78, 124);
+  border: 1px solid rgb(255, 255, 255);
   border-radius: 5px;
   cursor: pointer;
   color: white;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 0.9rem;
 }
 
 .pagination > ul > li:hover {
   background-color: white;
-  background: linear-gradient(to right, #ff7e5f, #feb47b);
-  border: 1px solid rgb(5, 78, 124);
-  color: black;
+  background: linear-gradient(to bottom, #80dae2, #03516b);
+  color: rgb(255, 255, 255);
+  font-weight: 700;
 }
 
-.pagination > ul > li:active {
-  background-color: rgb(189, 16, 99);
-  border: 1px solid rgb(189, 16, 99);
-  color: black;
+.pagPagination li {
+  padding: 5px 10px;
+  background-color: rgb(5, 78, 124);
+  background: linear-gradient(to bottom, #24a6c3, #025f7e);
+  margin: 0 5px;
+  border: 1px solid rgb(255, 255, 255);
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.pagPagination {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  padding: 0;
 }
 
-.buttonPagination {
+
+.pagPagination li:hover {
+  background-color: white;
+  background: linear-gradient(to bottom, #80dae2, #03516b);
+  color: rgb(255, 255, 255);
+  font-weight: 700;
+}
+
+.buttonPaginationLeft,
+.buttonPaginationRight {
   display: flex;
   align-items: center;
-  padding-right: 80px;
 }
-
 .btnPagination {
   color: black;
   background-color: transparent;
@@ -290,4 +363,24 @@ label {
     padding: 10px;
   }
 
+}
+
+@media (max-width: 950px) {
+
+  .pagination {
+    display: flex;
+    flex-direction: column;
+    
+    justify-content:space-between;
+    align-items: center;
+    
+  }
+  
+  .pageSice {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 15px;
+  }
+  
 }

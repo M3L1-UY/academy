@@ -11,7 +11,7 @@ function Modal({ children, title, modalClose, size, modalNivel, bgChange }) {
   useEffect(() => {
     switch (size) {
       case "small":
-        setClase("modalView modalViewSmall");
+        setClase(`modalView modalViewSmall ${bgChange ? "modalBodyGrey" : "modalBodyWhite"}`);
         break;
       case "medio":
         setClase(
