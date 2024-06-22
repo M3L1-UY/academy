@@ -4,7 +4,7 @@ import { useUsersContext } from "./UsersContext";
 export const useFetch = (url) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsloading] = useState(true);
-  const { usersContext } = useUsersContext();
+  const { usersContext } = useUsersContext() || {};
   const token = usersContext?.token;
 
   const fetchData = async (url, method = "GET", formData = null) => {
