@@ -1,32 +1,33 @@
 import { useState, useEffect } from "react";
+import { useUsersContext } from "./UsersContext";
 
 export const useFetch = (url) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsloading] = useState(true);
+  const { usersContext } = useUsersContext();
+  const token = usersContext?.token;
 
   const fetchData = async (url, method = "GET", formData = null) => {
     setIsloading(true);
+
+      const headers = {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      };
+
+      if (token) {
+        console.log("entre en userContext")
+        headers["Authorization"] = `Bearer ${usersContext?.token}`;
+      }
     try {
       let options = null;
       // if (!formData?.imageCourse) {
       options = {
         method: method,
-        credentials: "same-origin",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: formData ? JSON.stringify(formData) : null,
       };
-      // } else {
-      //   options = {
-      //     method: method,
-      //     body: formData,
-      //   };
-      // }
-      // console.log("valor de} envío...:", url, options);
 
       const response = await fetch(url, options);
       // console.log("response....:", response);
