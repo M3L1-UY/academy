@@ -32,7 +32,8 @@ export default function ListCurso({ title, accion }) {
     { id: 2, nombre: "nombre", descrip: "Nombre" },
   ];
   const { usersContext } = useUsersContext();
-  console.log("afuera " + usersContext)
+  console.log("afuera ");
+  console.log(usersContext)
 
   useEffect(() => {
     console.log("en use effect" + usersContext)
@@ -51,7 +52,8 @@ export default function ListCurso({ title, accion }) {
   }, [accion, usersContext?.role]);
 
   const handleAddCursos = () => {
-    console.log("en agregar " + usersContext)
+    console.log("en agregar " + usersContext?.token)
+    console.log(usersContext);
     const tittle = "Adición de Cursos";
     openModal(
       <Curso curso={""} edit={false} riviewList={updateList} />,

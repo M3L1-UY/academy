@@ -12,7 +12,7 @@ export default function Curso({ curso, edit, riviewList }) {
   const api = `${hostServer}/api/course`;
 
     const { uploadFile } = useCoursesImageUpload();
-
+     console.log("entra en Curso");
     const [teachers, setTeachers] = useState([]);
     const [error, setError] = useState(false);
     const { HandleClose } = useAppContext();
