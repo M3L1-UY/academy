@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useFetch } from "../../hooks/useFetch";
 import { useForm } from "../../hooks/useForm";
 import { useAppContext } from "../../hooks/appContext";
+import { useUsersContext } from "../../hooks/UsersContext";
 import Swal from "sweetalert2";
 import ValidateErrors from "../../componets/services/ValidateErrors";
 import validationSchema from "../../componets/services/validationSchema";
@@ -10,7 +11,7 @@ import { useCoursesImageUpload } from "../../firebase/coursesImageUpload";
 export default function Curso({ curso, edit, riviewList }) {
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const api = `${hostServer}/api/course`;
-
+  const { usersContext } = useUsersContext();
     const { uploadFile } = useCoursesImageUpload();
 
     const [teachers, setTeachers] = useState([]);
@@ -134,6 +135,9 @@ export default function Curso({ curso, edit, riviewList }) {
     
     handleInputChange();
     if (!numError) {
+
+      const token = usersContext?.token;
+      const formDataToken = token ? { ...formData, token } : { ...formData };
       let urlServer = `${api}`;
       let response;
       console.log(curso);
@@ -149,10 +153,10 @@ export default function Curso({ curso, edit, riviewList }) {
 
         console.log(formData)
         if (!edit) {
-          response = await createData(urlServer, formData);
+          response = await createData(urlServer, formDataToken);
           setIsLoading(false);
         } else {
-          response = await updateData(urlServer, curso._id, formData);
+          response = await updateData(urlServer, curso._id, formDataToken);
           setIsLoading(false);
         }
         
