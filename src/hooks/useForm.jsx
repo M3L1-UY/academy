@@ -13,13 +13,11 @@ export const useForm = (initialForm, validationSchema) => {
       [name]: newValue,
     });
 
-    // Clear errors for the field when it changes
     setErrorsInput({
       ...errorsInput,
       [name]: [],
     });
 
-    // Validate the specific field
     validateField(name, newValue);
   };
 

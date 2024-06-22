@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { useUsersContext } from "./UsersContext";
 
+
 export const useFetch = (url) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsloading] = useState(true);
   const { usersContext } = useUsersContext();
   const token = usersContext?.token;
-
+  
   const fetchData = async (url, method = "GET", formData = null) => {
     setIsloading(true);
     try {
@@ -19,6 +20,8 @@ export const useFetch = (url) => {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
         body: formData
           ? JSON.stringify({ ...formData, token })
           : null,
