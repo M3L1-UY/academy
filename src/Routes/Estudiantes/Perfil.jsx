@@ -187,7 +187,7 @@ export default function Perfil({ title }) {
                         )}
                       </div>
                       <div className="form-group col-md-6 mt-2">
-                      <label htmlFor="inputName">{usersContext?.dni} Apellidos</label>
+                      <label htmlFor="inputName">Apellidos</label>
 
                         <input
                           type="text"
