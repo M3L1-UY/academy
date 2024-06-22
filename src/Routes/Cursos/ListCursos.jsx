@@ -32,10 +32,12 @@ export default function ListCurso({ title, accion }) {
     { id: 2, nombre: "nombre", descrip: "Nombre" },
   ];
   const { usersContext } = useUsersContext();
+  console.log("afuera " + usersContext)
 
   useEffect(() => {
+    console.log("en use effect" + usersContext)
     if (accion === "gestionar") {
-      if (usersContext.role !== "isTeacher" && usersContext.role !== "isAdmin") {
+      if (usersContext?.role !== "isTeacher" && usersContext?.role !== "isAdmin") {
         Swal.fire({
           position: "top",
           icon: "info",
@@ -46,9 +48,10 @@ export default function ListCurso({ title, accion }) {
         navigate(`/`);
       }
     }
-  }, [accion, usersContext.role]);
+  }, [accion, usersContext?.role]);
 
   const handleAddCursos = () => {
+    console.log("en agregar " + usersContext)
     const tittle = "Adición de Cursos";
     openModal(
       <Curso curso={""} edit={false} riviewList={updateList} />,
