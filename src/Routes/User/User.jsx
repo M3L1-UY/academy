@@ -6,7 +6,7 @@ import { useUsersContext} from "../../hooks/UsersContext"
 import Swal from "sweetalert2";
 import ValidateErrors from "../../componets/services/ValidateErrors";
 import validationSchema from "../../componets/services/validationSchema";
-import AccessProfil from "../../componets/services/AccessProfil";
+import Cookies from "js-cookie";
 
 export default function User({ user, edit, riviewList }) {
   const { HandleClose } = useAppContext();
@@ -65,6 +65,7 @@ export default function User({ user, edit, riviewList }) {
   let { data, createData, updateData } = useFetch(null);
 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
     const numError = validateForm();
     let response;
@@ -87,7 +88,19 @@ export default function User({ user, edit, riviewList }) {
     if (!numError) {
       try{
       let url = `${api}`;
+      const storedUser = Cookies.get("user");
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          formData.token = parsedUser?.token;
+        } catch (error) {
+          console.error("Failed to parse user from cookie:", error);
+        }
+      }
+
+
       if (!edit) {
+        console.log(formData)
         response = await createData(url, formData);
         setIsLoading(false);
       } else {
@@ -182,7 +195,7 @@ export default function User({ user, edit, riviewList }) {
           errorMessage()
         ) : (
           <div className="container pt-3 px-5 pb-3 col-md-10 mx-auto">
-            <form>
+            <form onSubmit={handleSubmit} >
               <div className="row">
                 <div className="form-group col-md-6 mt-2 mb-3 mx-auto">
                 <label htmlFor="dni">Documento de Identidad *</label>

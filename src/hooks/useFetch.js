@@ -7,6 +7,7 @@ export const useFetch = () => {
 
   const fetchData = async (url, method = "GET", formData = null) => {
     setIsLoading(true);
+    let role;
 
     const storedUser = Cookies.get("user");
     let headers = {
@@ -17,6 +18,7 @@ export const useFetch = () => {
       try {
         const parsedUser = JSON.parse(storedUser);
         headers.Authorization = `Bearer ${parsedUser?.token}`;
+        
       } catch (error) {
         console.error("Failed to parse user from cookie:", error);
       }
@@ -31,7 +33,6 @@ export const useFetch = () => {
     if (method !== "GET" && formData) {
       options.body = JSON.stringify(formData);
     }
-
     try {
       const response = await fetch(url, options);
       const responseData = await response.json();
@@ -66,6 +67,11 @@ export const useFetch = () => {
     return resp;
   };
 
+  const getProtectedData = async (url) => {
+    const resp = await fetchData(url, "POST");
+    return resp;
+  };
+
   const updateData = async (url, dataId, formData) => {
     const resp = await fetchData(`${url}/${dataId}`, "PUT", formData);
     return resp;
@@ -91,6 +97,7 @@ export const useFetch = () => {
     data,
     isLoading,
     getData,
+    getProtectedData,
     createData,
     updateData,
     deleteData,

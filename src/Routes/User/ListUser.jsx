@@ -22,7 +22,7 @@ export default function ListUser({ title }) {
   const [selectedItems, setSelectedItems] = useState([]);
   const [page, setPage] = useState(1);
   const [itemsPage, setItemsPage] = useState(8);
-  let { data, isLoading, getData, deleteData } = useFetch(`${api}`);
+  let { data, isLoading, getProtectedData, deleteData } = useFetch(`${api}`);
 
   const filters = [
     { id: 1, nombre: "Dni", descrip: "Documento" },
@@ -97,7 +97,7 @@ export default function ListUser({ title }) {
   };
 
   const getUsers = async () => {
-     await getData(api);
+     await getProtectedData(api);
   };
 
   const translateRole = (role) => {

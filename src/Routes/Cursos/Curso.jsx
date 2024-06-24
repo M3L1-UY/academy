@@ -14,8 +14,6 @@ export default function Curso({ curso, edit, riviewList }) {
   const api = `${hostServer}/api/course`;
   const { usersContext } = useUsersContext() || {}; 
     const { uploadFile } = useCoursesImageUpload();
-
-     console.log("entra en Curso");
     const [teachers, setTeachers] = useState([]);
     const [error, setError] = useState(false);
     const { HandleClose } = useAppContext();
@@ -140,7 +138,7 @@ export default function Curso({ curso, edit, riviewList }) {
     if (!numError) {
       let urlServer = `${api}`;
       let response;
-      console.log(curso);
+
       try {
         if (imageCourse) {
          
@@ -264,7 +262,6 @@ export default function Curso({ curso, edit, riviewList }) {
   const getTeachers = async () => {
     const urlServer = `${hostServer}/api/teachers`;
     const response = await fetch(urlServer);
-    console.log(response)
     const responseData = await response.json();
     if (async () => await responseData.data) {
       setTeachers(responseData.data);
