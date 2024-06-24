@@ -50,7 +50,7 @@ export default function ListMatricula({ title }) {
   function handleEdit(matricula) {
     const tittle = "Edición de Matrícula";
     openModal(
-      <Matricula matricula={matricula} edit={true} riviewList={updateList} />,
+      <Matricula matricula={matricula} edit={true} riviewList={updateList} userContext={usersContext}/>,
       HandleClose,
       "small",
       tittle,
@@ -177,7 +177,7 @@ export default function ListMatricula({ title }) {
                             <TbEdit
                               className=".btnShow"
                               style={{ fontSize: "25px" }}
-                              onClick={() => handleEdit(matricula)}
+                              onClick={() => handleEdit(matricula, usersContext)}
                             />
                           </td>
                           <td>

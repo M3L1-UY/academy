@@ -6,16 +6,20 @@ import Swal from "sweetalert2";
 import ValidateErrors from "../../componets/services/ValidateErrors";
 import validationSchema from "../../componets/services/validationSchema";
 import { useCoursesImageUpload } from "../../firebase/coursesImageUpload";
+import { useUsersContext } from "../../hooks/UsersContext";
+import Cookies from "js-cookie";
 
 export default function Curso({ curso, edit, riviewList }) {
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const api = `${hostServer}/api/course`;
-
+  const { usersContext } = useUsersContext() || {}; 
     const { uploadFile } = useCoursesImageUpload();
+
      console.log("entra en Curso");
     const [teachers, setTeachers] = useState([]);
     const [error, setError] = useState(false);
     const { HandleClose } = useAppContext();
+
     const initialForm = {
     id: curso ? curso._id : "",
     codigo: curso ? curso.codigo : "",
@@ -147,7 +151,16 @@ export default function Curso({ curso, edit, riviewList }) {
 
         formData.profesores = profesores;
 
-        console.log(formData)
+        const storedUser = Cookies.get("user");
+        if (storedUser) {
+          try {
+            const parsedUser = JSON.parse(storedUser);
+            formData.token = parsedUser?.token;
+          } catch (error) {
+            console.error("Failed to parse user from cookie:", error);
+          }
+        }
+
         if (!edit) {
           response = await createData(urlServer, formData);
           setIsLoading(false);
@@ -251,6 +264,7 @@ export default function Curso({ curso, edit, riviewList }) {
   const getTeachers = async () => {
     const urlServer = `${hostServer}/api/teachers`;
     const response = await fetch(urlServer);
+    console.log(response)
     const responseData = await response.json();
     if (async () => await responseData.data) {
       setTeachers(responseData.data);
@@ -425,7 +439,7 @@ export default function Curso({ curso, edit, riviewList }) {
                         className="form-control"
                         name="clasificacion"
                         placeholder="Ingrese clasificación del 0 al 5"
-                        value={clasificacion}
+                        value={clasificacion || ''}
                         onChange={onInputChange}
                       />
                       {isSubmitted && errorsInput.clasificacion && (

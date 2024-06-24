@@ -7,7 +7,7 @@ import ValidateErrors from "../../componets/services/ValidateErrors";
 import {validationMatriculaSchema} from "../../componets/services/validationSchema";
 
 
-export default function Matricula({ matricula, edit, riviewList }) {
+export default function Matricula({ matricula, edit, riviewList, userContext }) {
   const { HandleClose } = useAppContext();
   const hostServer = import.meta.env.VITE_REACT_APP_SERVER_HOST;
   const api = `${hostServer}/api/matricula`;
@@ -73,6 +73,7 @@ export default function Matricula({ matricula, edit, riviewList }) {
   else if(!numError) {
     try {
         let url = `${api}`;
+      
         if (!edit) {
           await createData(url, formData);
           setIsLoading(false);

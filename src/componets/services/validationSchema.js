@@ -64,9 +64,9 @@ const validationSchema = {
     (value) => (value.trim() === "" ? "El código es requerido" : undefined),
   ],
   costo: [
-    (value) => (value.toString().trim() === "" ? "El costo es requerido" : undefined),
-    (value) => (value.toString().trim() !== "" && value.toString().match("^[0-9]+$") === null ? "Solo se admiten números" : undefined),
-    (value) => (value.toString().trim() !== "" && Number(value) <= 0 ? "El costo debe ser un número positivo" : undefined),
+    (value) => (value?.toString().trim() === "" ? "El costo es requerido" : undefined),
+    (value) => (value?.toString().trim() !== "" && value.toString().match("^[0-9]+$") === null ? "Solo se admiten números" : undefined),
+    (value) => (value?.toString().trim() !== "" && Number(value) <= 0 ? "El costo debe ser un número positivo" : undefined),
   ],
   role: [
     (value) => {
@@ -87,8 +87,8 @@ const validationSchema = {
     (value) => (value.trim() !== "" && Number(value) > 36 ? "La duración no debe superar los 36 meses" : undefined),
   ],
   clasificacion: [
-    (value) => (value.toString().trim() !== "" && value.toString().match("^[0-9]+$") === null && value.trim() !== "" ? "Solo se admiten números" : undefined),
-    (value) => (value.toString().trim() !== "" && (Number(value) < 0 || Number(value) > 5) && value.trim() !== "" ? "La clasificación debe estar entre 0 y 5" : undefined),
+    (value) => (value?.toString().trim() !== "" && value?.toString().match("^[0-9]+$") === null && value?.trim() !== "" ? "Solo se admiten números" : undefined),
+    (value) => (value?.toString().trim() !== "" && (Number(value) < 0 || Number(value) > 5) && value.trim() !== "" ? "La clasificación debe estar entre 0 y 5" : undefined),
   ],
 };
 

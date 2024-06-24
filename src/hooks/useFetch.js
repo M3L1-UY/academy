@@ -1,44 +1,43 @@
-import { useState, useEffect } from "react";
-import { useUsersContext } from "./UsersContext";
+import { useState } from "react";
+import Cookies from "js-cookie";
 
-export const useFetch = (url) => {
+export const useFetch = () => {
   const [data, setData] = useState(null);
-  const [isLoading, setIsloading] = useState(true);
-  const { usersContext } = useUsersContext() || {};
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = async (url, method = "GET", formData = null) => {
-    setIsloading(true);
+    setIsLoading(true);
+
+    const storedUser = Cookies.get("user");
+    let headers = {
+      "Content-Type": "application/json",
+    };
+
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        headers.Authorization = `Bearer ${parsedUser?.token}`;
+      } catch (error) {
+        console.error("Failed to parse user from cookie:", error);
+      }
+    }
+
+    let options = {
+      method: method,
+      credentials: "include",
+      headers: headers,
+    };
+
+    if (method !== "GET" && formData) {
+      options.body = JSON.stringify(formData);
+    }
 
     try {
-      let options = null;
-      // if (!formData?.imageCourse) {
-      options = {
-        method: method,
-        credentials: "same-origin",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        //body: formData ? JSON.stringify(formData) : null,
-        body: formData ? JSON.stringify({ ...formData, token: usersContext?.token }) : null,
-      };
-      // } else {
-      //   options = {
-      //     method: method,
-      //     body: formData,
-      //   };
-      // }
-      // console.log("valor de} envío...:", url, options);
-
       const response = await fetch(url, options);
-      // console.log("response....:", response);
       const responseData = await response.json();
-      // console.log("responseData....:", responseData);
       const result = {
         status: response.status,
-        data: await responseData,
+        data: responseData,
       };
       setData(result);
       return result;
@@ -47,13 +46,13 @@ export const useFetch = (url) => {
         const data = {
           status: 500,
           message: "No se pudo establecer conexión con el servidor",
-          exito: false,
-          errorSystem: await error.message,
+          success: false,
+          errorSystem: error.message,
         };
         setData(data);
       }
     } finally {
-      setIsloading(false);
+      setIsLoading(false);
     }
   };
 
@@ -77,19 +76,17 @@ export const useFetch = (url) => {
     return resp;
   };
 
-  const envioCorreo = async (url, formData) => {
+  const sendEmail = async (url, formData) => {
     const resp = await fetchData(url, "POST", formData);
-    const salidaOk = {
-      message: "Registro agregado con éxito",
-    };
-    const data = {
+    const successData = {
       status: 201,
-      data: salidaOk,
-      exito: true,
+      data: { message: "Registro agregado con éxito" },
+      success: true,
     };
-    setData(data);
+    setData(successData);
     return resp;
   };
+
   return {
     data,
     isLoading,
@@ -97,6 +94,6 @@ export const useFetch = (url) => {
     createData,
     updateData,
     deleteData,
-    envioCorreo,
+    sendEmail,
   };
 };

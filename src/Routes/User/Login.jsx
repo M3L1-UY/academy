@@ -50,7 +50,6 @@ const Login = () => {
   useEffect(() => {
     if (data?.status === 200) {
       setUsersContext(data.data.data);
-      console.log(data.data.data)
       Cookies.set("user", JSON.stringify(data.data.data), { expires: 7 }); 
       navigate("/");
     } else if (data?.status === 400) {
